@@ -1,6 +1,6 @@
 <template>
     <v-dialog max-width="600px" v-model="dialog">
-        <v-btn flat slot="activator" class="success">Add Trim <v-icon right>fal fa-plus</v-icon></v-btn>
+        <v-btn flat slot="activator" class="success">Trim <v-icon right>fal fa-plus</v-icon></v-btn>
         <v-card>
             <v-card-title>
                 <h2>Add Trim/Incoming Package</h2>
@@ -10,7 +10,15 @@
                     <v-text-field label="Shop" v-model="trim.shop" clearable></v-text-field>
                     <v-text-field label="License #" v-model="trim.license" clearable></v-text-field>
                     <v-text-field label="Manifest #" v-model="trim.manifest" clearable></v-text-field>
-                    <v-text-field label="METRC Tags (Last 4)" v-model="trim.batch" clearable></v-text-field>
+                    <v-text-field label="METRC Tags (Last 4) tab to add" @keydown.tab.prevent="addBatchNum" v-model="trim.batchNum" maxLength="4" clearable></v-text-field>
+                    <p class="secondary--text">
+                        Batch #'s to add: {{ trim.batch.join(', ') }} 
+                        <v-icon @click="clearBatch" class="pl-2 error--text" small>fal fa-times</v-icon>
+                    </p>
+                    <template v-if="$v.trim.batchNum.$error">
+                        <p class="error--text" v-if="!$v.trim.batchNum.numeric">Numerical values only</p>
+                        <p class="error--text" v-if="!$v.trim.batchNum.minLength">4 digits required</p>
+                    </template>
                     <v-text-field label="Strain" v-model="trim.strain" clearable></v-text-field>
                     <v-text-field label="Weight (g)" v-model.trim="$v.trim.weight.$model" clearable></v-text-field>
                     <template v-if="$v.trim.weight.$error">
@@ -46,7 +54,7 @@
 <script>
 import format from 'date-fns/format'
 import db from '@/firebase'
-import { required, numeric } from 'vuelidate/lib/validators'
+import { required, numeric, minLength, maxLength } from 'vuelidate/lib/validators'
 
 export default {
     name: 'addtrim',
@@ -57,6 +65,7 @@ export default {
                 license: '',
                 manifest: '',
                 batch: [],
+                batchNum: null,
                 strain: '',
                 weight: null,
                 failed: false,
@@ -72,21 +81,33 @@ export default {
             weight: {
                 required,
                 numeric
+            },
+            batchNum: {
+                numeric,
+                minLength: minLength(4),
+                maxLength: maxLength(4)
             }
         }
     },
     methods: {
+        addBatchNum() {
+            if(this.trim.batchNum) {
+                this.trim.batch.push(this.trim.batchNum)
+                this.trim.batchNum = null
+            }
+        },
+        clearBatch() {
+            this.trim.batch = []
+        },
         submit() {
-            
             this.$v.$touch()
-
             if(!this.$v.$invalid) {
                 this.loading = true
                 const trim = {
                     shop: this.trim.shop,
                     license: this.trim.license,
                     manifest: this.trim.manifest,
-                    batch: this.trim.batch,
+                    batch: this.trim.batch.join(', '),
                     strain: this.trim.strain,
                     weight: this.trim.weight,
                     failed: this.trim.failed,

@@ -51,24 +51,36 @@
                 </v-list-tile>
             </v-list>
             <v-divider class="grey my-4"></v-divider>
-            <v-flex class="text-xs-center">
-                <AddTrim /><br>
-                <v-btn flat color="white" class="px-3 mt-3">
-                    <span>Sign Out</span>
-                    <v-icon right>far fa-sign-out-alt</v-icon>
-                </v-btn>
+            <v-flex ml-2>
+                <label class="white--text ml-2 font-weight-bold text-uppercase">Control</label>
             </v-flex>
+            <v-layout row wrap xs12 class="mt-3">
+                <v-flex class="text-xs-center">
+                    <AddShopData />
+                    <AddTrim />
+                </v-flex>
+            </v-layout>
+            <v-layout row wrap xs12>
+                <v-flex class="text-xs-center">
+                    <v-btn flat color="white" class="px-3 mt-3">
+                        <span>Sign Out</span>
+                        <v-icon right>far fa-sign-out-alt</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
         </v-navigation-drawer>
     </nav>
 </template>
 
 <script>
 import AddTrim from './AddTrim'
+import AddShopData from './AddShopData'
 
 export default {
     name: 'navbar',
     components: {
-        AddTrim
+        AddTrim,
+        AddShopData
     },
     data() {
         return {

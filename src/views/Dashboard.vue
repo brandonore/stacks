@@ -2,16 +2,22 @@
   <div class="dashboard">
     <h1 class="mb-4 secondary--text">Dashboard</h1>
     <v-divider></v-divider>
-    <v-layout row wrap class="mt-4">
+    <v-container>
+      <v-layout justify-space-between row wrap class="mt-4">
       <v-flex xs12 sm6 md3 class="test-card">
-        <div class="card-body">
-          <h4 class="mb-3 secondary--text">Package Count</h4>
-          <div class="card-content secondary--text">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis, ullam.
-          </div>
-        </div>
+        <h4 class="mb-3 secondary--text">Package Count</h4>
+        <h2 class="text-xs-left">392</h2>
+      </v-flex>
+      <v-flex xs12 sm6 md3 class="test-card">
+        <h4 class="mb-3 secondary--text">Package Count</h4>
+        <h2 class="text-xs-left">392</h2>
+      </v-flex>
+      <v-flex xs12 sm6 md3 class="test-card">
+        <h4 class="mb-3 secondary--text">Package Count</h4>
+        <h2 class="text-xs-left">392</h2>
       </v-flex>
     </v-layout>
+    </v-container>
     <!-- charts -->
     <v-layout row wrap class="mt-4">
       <v-flex xs12 sm6 md4>

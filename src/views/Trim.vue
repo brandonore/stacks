@@ -1,6 +1,6 @@
 <template>
     <div class="trim">
-        <h1 class="mb-4">Trim on hand</h1>
+        <h1 class="mb-4 secondary--text">Trim on hand</h1>
         <v-divider class="mb-4"></v-divider>
         <v-card>
             <v-card-title>
