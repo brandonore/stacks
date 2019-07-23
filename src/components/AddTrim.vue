@@ -3,21 +3,26 @@
         <v-btn flat slot="activator" class="success">Trim <v-icon right>fal fa-plus</v-icon></v-btn>
         <v-card>
             <v-card-title>
-                <h2>Add Trim/Incoming Package</h2>
+                <h2 class="secondary--text">Add Trim/Incoming Package</h2>
             </v-card-title>
             <v-card-text>
                 <v-form class="px-3" ref="form">
-                    <v-text-field label="Shop" v-model="trim.shop" clearable></v-text-field>
-                    <v-text-field label="License #" v-model="trim.license" clearable></v-text-field>
+                    <v-select 
+                        outline 
+                        label="Select Shop" 
+                        :items="shopdata" 
+                        item-text="shopname" 
+                        v-model="trim.shop" 
+                        clearable 
+                        return-object 
+                        @change="populateLicense(trim.shop.shopname, trim.shop.license)"
+                    ></v-select>
+                    <v-text-field label="License #" v-model="trim.license"></v-text-field>
                     <v-text-field label="Manifest #" v-model="trim.manifest" clearable></v-text-field>
-                    <v-text-field label="METRC Tags (Last 4) tab to add" @keydown.tab.prevent="addBatchNum" v-model="trim.batchNum" maxLength="4" clearable></v-text-field>
-                    <p class="secondary--text">
-                        Batch #'s to add: {{ trim.batch.join(', ') }} 
-                        <v-icon @click="clearBatch" class="pl-2 error--text" small>fal fa-times</v-icon>
-                    </p>
-                    <template v-if="$v.trim.batchNum.$error">
-                        <p class="error--text" v-if="!$v.trim.batchNum.numeric">Numerical values only</p>
-                        <p class="error--text" v-if="!$v.trim.batchNum.minLength">4 digits required</p>
+                    <v-text-field label="METRC Tags (Last 4) Comma seperated list for multiple values" v-model="$v.trim.batch.$model" clearable></v-text-field>
+                    <template v-if="$v.trim.batch.$error">
+                        <p class="error--text" v-if="!$v.trim.batch.required">Value required</p>
+                        <p class="error--text" v-if="!$v.trim.batch.minLength">4 digits required</p>
                     </template>
                     <v-text-field label="Strain" v-model="trim.strain" clearable></v-text-field>
                     <v-text-field label="Weight (g)" v-model.trim="$v.trim.weight.$model" clearable></v-text-field>
@@ -37,11 +42,12 @@
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
-                        <v-flex xs12 sm6>
+                        <v-flex xs12 sm4>
                             <v-switch label="Failed?" v-model="trim.failed" color="primary"></v-switch>
                         </v-flex>
-                        <v-flex xs12 sm6 class="text-sm-right">
-                            <v-btn flat class="success mr-2 mt-3 grey--text" outline @click="dialog = false">Cancel</v-btn>
+                        <v-flex xs12 sm8 class="text-sm-right">
+                            <v-btn flat class="error mr-2 mt-3 error--text" outline @click="reset">Clear</v-btn>
+                            <v-btn flat class="success mr-2 mt-3 success--text" outline @click="dialog = false">Cancel</v-btn>
                             <v-btn flat class="success mr-2 mt-3" @click="submit" :loading="loading">Add</v-btn>
                         </v-flex>
                     </v-layout>
@@ -54,7 +60,7 @@
 <script>
 import format from 'date-fns/format'
 import db from '@/firebase'
-import { required, numeric, minLength, maxLength } from 'vuelidate/lib/validators'
+import { required, numeric, minLength } from 'vuelidate/lib/validators'
 
 export default {
     name: 'addtrim',
@@ -72,6 +78,7 @@ export default {
                 type: '',
                 date: null
             },
+            shopdata: [],
             loading: false,
             dialog: false
         }
@@ -82,10 +89,9 @@ export default {
                 required,
                 numeric
             },
-            batchNum: {
-                numeric,
-                minLength: minLength(4),
-                maxLength: maxLength(4)
+            batch: {
+                required,
+                minLength: minLength(4)
             }
         }
     },
@@ -99,6 +105,10 @@ export default {
         clearBatch() {
             this.trim.batch = []
         },
+        populateLicense(shopname, license) {
+            this.trim.shop = shopname
+            this.trim.license = license
+        },
         submit() {
             this.$v.$touch()
             if(!this.$v.$invalid) {
@@ -107,7 +117,7 @@ export default {
                     shop: this.trim.shop,
                     license: this.trim.license,
                     manifest: this.trim.manifest,
-                    batch: this.trim.batch.join(', '),
+                    batch: this.trim.batch.replace(/\s/g, ','),
                     strain: this.trim.strain,
                     weight: this.trim.weight,
                     failed: this.trim.failed,
@@ -135,12 +145,26 @@ export default {
         },
         reset () {
             this.$refs.form.reset()
+            this.trim.batch = []
         }
     },
     computed: {
         formattedDate() {
             return this.trim.date ? format(this.trim.date, 'MMM Do YYYY') : ''
         }
+    },
+    created() {
+        db.collection('shopdata').onSnapshot((res) => {
+            const changes = res.docChanges()
+            changes.forEach((change) => {
+                if(change.type === 'added') {
+                    this.shopdata.push({
+                        ...change.doc.data(),
+                        id: change.doc.id
+                    })
+                }
+            })
+        })
     }
 }
 </script>

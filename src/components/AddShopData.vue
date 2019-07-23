@@ -3,7 +3,7 @@
         <v-btn flat slot="activator" outline class="success white--text">Shop <v-icon right>fal fa-plus</v-icon></v-btn>
         <v-card>
             <v-card-title>
-                <h2>Add Shop</h2>
+                <h2 class="secondary--text">Add Shop</h2>
             </v-card-title>
             <v-card-text>
                 <v-form class="px-3" ref="form">
@@ -11,7 +11,7 @@
                     <v-text-field label="License #" v-model="license" clearable></v-text-field>
                     <v-layout row wrap>
                         <v-flex xs12 class="text-xs-center">
-                            <v-btn flat class="success mr-2 mt-3 grey--text" outline @click="dialog = false">Cancel</v-btn>
+                            <v-btn flat class="success mr-2 mt-3 success--text" outline @click="dialog = false">Cancel</v-btn>
                             <v-btn flat class="success mr-2 mt-3" @click="submit" :loading="loading">Add</v-btn>
                         </v-flex>
                     </v-layout>
