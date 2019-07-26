@@ -1,18 +1,26 @@
 <template>
     <v-dialog max-width="600px" v-model="dialog">
-        <v-btn flat slot="activator" outline class="success white--text">Shop <v-icon right>fal fa-plus</v-icon></v-btn>
+        <template v-slot:activator="{ on }">
+            <v-btn class="white--text pa-3" v-on="on" outlined>Shop <v-icon right>fal fa-plus</v-icon></v-btn>
+        </template>
         <v-card>
-            <v-card-title>
-                <h2 class="secondary--text">Add Shop</h2>
+            <v-card-title class="mb-5">
+                <h3 class="secondary--text">Add a new shop</h3>
             </v-card-title>
             <v-card-text>
                 <v-form class="px-3" ref="form">
                     <v-text-field label="Shop Name" v-model="shopname" clearable></v-text-field>
+                    <template v-if="$v.shopname.$error">
+                        <p class="error--text" v-if="!$v.shopname.required">Value required</p>
+                    </template>
                     <v-text-field label="License #" v-model="license" clearable></v-text-field>
+                    <template v-if="$v.license.$error">
+                        <p class="error--text" v-if="!$v.license.required">Value required</p>
+                    </template>
                     <v-layout row wrap>
-                        <v-flex xs12 class="text-xs-center">
-                            <v-btn flat class="success mr-2 mt-3 success--text" outline @click="dialog = false">Cancel</v-btn>
-                            <v-btn flat class="success mr-2 mt-3" @click="submit" :loading="loading">Add</v-btn>
+                        <v-flex xs12 class="text-center">
+                            <v-btn class="mr-2 mt-3" outlined color="error" @click="dialog = false">Cancel</v-btn>
+                            <v-btn text class="success mr-2 mt-3" @click="submit" :loading="loading">Add</v-btn>
                         </v-flex>
                     </v-layout>
                 </v-form>
@@ -31,7 +39,8 @@ export default {
         return {
             shopname: '',
             license: '',
-            dialog: false
+            dialog: false,
+            loading: false
         }
     },
     validations: {
@@ -54,10 +63,8 @@ export default {
                 db.collection('shopdata').add(shop).then(() => {
                     this.loading = false
                     this.dialog = false
-                    this.trim = {
-                        shopname: '',
-                        license: '',
-                    }
+                    this.shopname = ''
+                    this.license = ''
                 })
             } else {
                 return

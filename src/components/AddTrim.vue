@@ -1,20 +1,22 @@
-<template>
-    <v-dialog max-width="600px" v-model="dialog">
-        <v-btn flat slot="activator" class="success">Trim <v-icon right>fal fa-plus</v-icon></v-btn>
+<template>    
+    <v-dialog max-width="650" v-model="dialog">
+        <template v-slot:activator="{ on }">
+            <v-btn v-on="on" text color="white" class="success">Trim <v-icon right>fal fa-plus</v-icon></v-btn>
+        </template>
         <v-card>
-            <v-card-title>
-                <h2 class="secondary--text">Add Trim/Incoming Package</h2>
+            <v-card-title class="mb-5">
+                <h3 class="secondary--text">Add Trim/Incoming Package</h3>
             </v-card-title>
             <v-card-text>
                 <v-form class="px-3" ref="form">
-                    <v-select 
-                        outline 
-                        label="Select Shop" 
-                        :items="shopdata" 
-                        item-text="shopname" 
-                        v-model="trim.shop" 
-                        clearable 
-                        return-object 
+                    <v-select
+                        label="Select Shop"
+                        :items="shopdata"
+                        item-text="shopname"
+                        v-model="trim.shop"
+                        clearable
+                        return-object
+                        offset-y
                         @change="populateLicense(trim.shop.shopname, trim.shop.license)"
                     ></v-select>
                     <v-text-field label="License #" v-model="trim.license"></v-text-field>
@@ -25,19 +27,15 @@
                         <p class="error--text" v-if="!$v.trim.batch.minLength">4 digits required</p>
                     </template>
                     <v-text-field label="Strain" v-model="trim.strain" clearable></v-text-field>
-                    <v-text-field label="Weight (g)" v-model.trim="$v.trim.weight.$model" clearable></v-text-field>
-                    <template v-if="$v.trim.weight.$error">
-                        <p class="error--text" v-if="!$v.trim.weight.numeric">Numerical values only</p>
-                        <p class="error--text" v-if="!$v.trim.weight.required">Value required</p>
-                    </template>
-                    <v-layout row wrap>
-                        <v-flex xs12 sm6>
-                            <v-text-field label="Trim/Bud/Live" v-model="trim.type" clearable></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6 class="text-sm-right">
-                            <v-menu>
-                                <v-text-field :value="formattedDate" slot="activator" label="Input Date" clearable></v-text-field>
-                                <v-date-picker v-model="trim.date"></v-date-picker>
+                    <v-text-field label="Weight (g)" v-model.trim="trim.weight" clearable></v-text-field>
+                    <v-text-field label="Trim/Bud/Live" v-model="trim.type" clearable></v-text-field>
+                    <v-layout wrap>
+                        <v-flex xs12>
+                            <v-menu offset-y transition="slide-x-transition" min-width="290px">
+                                <template v-slot:activator="{ on }">
+                                    <v-text-field :value="formattedDate" v-on="on" label="Input Date" clearable></v-text-field>
+                                </template>
+                                <v-date-picker show-current landscape v-model="trim.date"></v-date-picker>
                             </v-menu>
                         </v-flex>
                     </v-layout>
@@ -45,10 +43,10 @@
                         <v-flex xs12 sm4>
                             <v-switch label="Failed?" v-model="trim.failed" color="primary"></v-switch>
                         </v-flex>
-                        <v-flex xs12 sm8 class="text-sm-right">
-                            <v-btn flat class="error mr-2 mt-3 error--text" outline @click="reset">Clear</v-btn>
-                            <v-btn flat class="success mr-2 mt-3 success--text" outline @click="dialog = false">Cancel</v-btn>
-                            <v-btn flat class="success mr-2 mt-3" @click="submit" :loading="loading">Add</v-btn>
+                        <v-flex xs12 sm8 class="text-right">
+                            <v-btn class="mr-2 mt-3" outlined color="error" @click="reset">Clear</v-btn>
+                            <v-btn class="mr-2 mt-3" outlined color="success" @click="dialog = false">Cancel</v-btn>
+                            <v-btn text class="mr-2 mt-3 success" @click="submit" :loading="loading">Add</v-btn>
                         </v-flex>
                     </v-layout>
                 </v-form>
@@ -71,7 +69,6 @@ export default {
                 license: '',
                 manifest: '',
                 batch: [],
-                batchNum: null,
                 strain: '',
                 weight: null,
                 failed: false,
@@ -109,6 +106,10 @@ export default {
             this.trim.shop = shopname
             this.trim.license = license
         },
+        reset () {
+            this.$refs.form.reset()
+            this.trim.batch = []
+        },
         submit() {
             this.$v.$touch()
             if(!this.$v.$invalid) {
@@ -117,7 +118,7 @@ export default {
                     shop: this.trim.shop,
                     license: this.trim.license,
                     manifest: this.trim.manifest,
-                    batch: this.trim.batch.replace(/\s/g, ','),
+                    batch: this.trim.batch,
                     strain: this.trim.strain,
                     weight: this.trim.weight,
                     failed: this.trim.failed,
@@ -143,10 +144,6 @@ export default {
                 return
             }
         },
-        reset () {
-            this.$refs.form.reset()
-            this.trim.batch = []
-        }
     },
     computed: {
         formattedDate() {

@@ -1,75 +1,82 @@
 <template>
-    <nav>
-        <!-- top toolbar -->
-        <v-toolbar flat app>
-            <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"></v-toolbar-side-icon>
-            <v-toolbar-title class="text-uppercase success--text">
-                <span class="font-weight-light grey--text">Marsh</span>
-                <span>Mallow</span>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <!-- top dropdown menu -->
-            <v-menu offset-y transition="slide-x-transition">
-                <v-btn flat slot="activator" color="grey" class="px-3"> 
-                    <v-icon left>far fa-angle-down</v-icon>
-                    <span>menu</span>    
-                </v-btn>
-                <v-list>
-                    <v-list-tile v-for="link in links" :key="link.text" router :to="link.route">
-                        <v-list-tile-title>{{ link.text }}</v-list-tile-title>
-                    </v-list-tile>
-                </v-list>
-            </v-menu>
-        </v-toolbar>
-        <!-- side menu -->
-        <v-navigation-drawer v-model="drawer" app class="secondary">
+    <v-app>
+        <v-navigation-drawer
+            v-model="drawer"
+            app
+            color="secondary"
+            width="300"
+        >
+        <v-list dense>
             <v-layout column align-center>
-                <v-flex class="mt-5 text-xs-center">
+                <v-flex class="mt-5 text-center">
                     <v-avatar size="100">
-                        <img src="/shiina-av.png" alt="">
+                        <img src="../../public/shiina-av.png" alt="">
                     </v-avatar>
-                    <p class="white--text my-0 mt-3 title font-weight-light">
+                    <div class="white--text my-0 mt-4 subtitle-1 font-weight-light">
                         Logged in as:
-                    </p>
-                    <p class="white--text mt-2 font-weight-bold subheading">
+                    </div>
+                    <div class="white--text font-weight-bold title">
                         y2ktheory
-                    </p>
+                    </div>
                 </v-flex>
             </v-layout>
-            <v-divider class="grey mt-3 mb-4"></v-divider>
-            <v-flex ml-2>
-                <label class="white--text ml-2 font-weight-bold text-uppercase">Menu</label>
+            <v-divider class="grey my-5"></v-divider>
+            <v-flex class="ml-2 mb-3">
+                <label class="white--text ml-2 body-2 text-uppercase">Menu</label>
             </v-flex>
-            <v-list>
-                <v-list-tile v-for="link in links" :key="link.text" router :to="link.route" color="purple" :class="link.route === $route.link ? 'highlighted' : ''" class="side-link">
-                    <v-list-tile-action>
-                        <v-icon class="white--text">{{ link.icon }}</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title class="white--text">{{ link.text }}</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
+            <v-list-item v-for="link in links" :key="link.text" :to="link.route" class="side-link">
+                <v-list-item-action>
+                    <v-icon color="white">{{ link.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title class="white--text">{{ link.text }}</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <v-divider class="grey my-5"></v-divider>
+                <v-flex class="ml-2 mb-3">
+                    <label class="white--text ml-2 body-2 text-uppercase">Control</label>
+                </v-flex>
+                <v-layout row wrap xs12 class="mt-5">
+                    <v-flex class="text-center">
+                        <AddShopData class="mr-5"/>
+                        <AddTrim />
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap xs12 class="mt-5">
+                    <v-flex class="text-center">
+                        <v-btn text color="white" class="px-3 mt-3">
+                            <span>Sign Out</span>
+                            <v-icon right>far fa-sign-out-alt</v-icon>
+                        </v-btn>
+                    </v-flex>
+                </v-layout>
             </v-list>
-            <v-divider class="grey my-4"></v-divider>
-            <v-flex ml-2>
-                <label class="white--text ml-2 font-weight-bold text-uppercase">Control</label>
-            </v-flex>
-            <v-layout row wrap xs12 class="mt-3">
-                <v-flex class="text-xs-center">
-                    <AddShopData />
-                    <AddTrim />
-                </v-flex>
-            </v-layout>
-            <v-layout row wrap xs12>
-                <v-flex class="text-xs-center">
-                    <v-btn flat color="white" class="px-3 mt-3">
-                        <span>Sign Out</span>
-                        <v-icon right>far fa-sign-out-alt</v-icon>
-                    </v-btn>
-                </v-flex>
-            </v-layout>
         </v-navigation-drawer>
-    </nav>
+
+        <v-app-bar
+            app
+            light
+            text
+            elevation="0"
+            class="grey lighten-4 app-bar"
+        >
+            <v-app-bar-nav-icon color="grey" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-divider
+                class="mx-4"
+                vertical
+                inset
+            ></v-divider>
+            <v-toolbar-title>
+                <span class="grey--text">MARSH</span>
+                <span class="success--text">MALLOW</span>
+            </v-toolbar-title>
+        </v-app-bar>
+        <v-content class="grey lighten-4">
+            <v-container fluid>
+                <router-view></router-view>
+            </v-container>
+        </v-content>
+    </v-app>
 </template>
 
 <script>
@@ -78,28 +85,33 @@ import AddShopData from './AddShopData'
 
 export default {
     name: 'navbar',
-    components: {
-        AddTrim,
-        AddShopData
+    components: { 
+        AddShopData, 
+        AddTrim
     },
-    data() {
-        return {
-            links: [
-                { icon: 'fas fa-home', text: 'Dashboard', route: '/' },
-                { icon: 'fas fa-sack', text: 'Trim', route: '/trim' },
-                { icon: 'fas fa-burn', text: 'Extraction', route: '/extract' },
-                { icon: 'fas fa-box', text: 'Packaging', route: '/package' },
-                { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'}
-            ],
-            drawer: true,
-            snackbar: false
-        }
-    }
-};
+    props: {
+        source: String,
+    },
+    data: () => ({
+        links: [
+            { icon: 'fas fa-home', text: 'Dashboard', route: '/' },
+            { icon: 'fas fa-sack', text: 'Trim', route: '/trim' },
+            { icon: 'fas fa-burn', text: 'Extraction', route: '/extract' },
+            { icon: 'fas fa-box', text: 'Packaging', route: '/package' },
+            { icon: 'fas fa-calendar-day', text: 'Calendar', route: '/calendar' },
+            { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'}
+        ],
+        drawer: null,
+        snackbar: false
+    }),
+}
 </script>
 
 <style>
     .side-link:hover {
         background: #3cd1c2;
+    }
+    .app-bar {
+        border-bottom: 2px solid black;
     }
 </style>

@@ -1,54 +1,132 @@
 <template>
-    <div class="trim">
-        <h1 class="mb-4 secondary--text">Trim on hand</h1>
-        <v-divider class="mb-4"></v-divider>
+  <div class="trim">
+    <h1 class="mb-4 secondary--text">Available Trim</h1>
+    <v-divider class="mb-5"></v-divider>
+      <v-container>
         <v-card>
-            <v-card-title>
-                Available Trim
-                <v-spacer></v-spacer>
-                <v-text-field
-                    v-model="search"
-                    append-icon="search"
-                    label="Search"
-                    single-line
-                    hide-details
-                ></v-text-field>
-            </v-card-title>
-            <v-data-table :headers="headers" :items="trim" :search="search" class="elevation-1 mt-4">
-                <template v-slot:items="props">
-                    <td>{{ props.item.shop }}</td>
-                    <td class="text-xs-right">{{ props.item.license }}</td>
-                    <td class="text-xs-right">{{ props.item.date }}</td>
-                    <td class="text-xs-right">{{ props.item.manifest }}</td>
-                    <td class="text-xs-right">{{ props.item.batch }}</td>
-                    <td class="text-xs-right">{{ props.item.strain }}</td>
-                    <td class="text-xs-right">{{ props.item.weight }}</td>
-                    <td class="text-xs-right"><v-chip small :class="`${props.item.failed} white--text`">{{ props.item.failed }}</v-chip></td>
-                    <td class="text-xs-right">{{ props.item.type }}</td>
-                    <td class="justify-center layout px-0">
-                        <v-icon small class="mr-3" @click="test(props.item.id)">far fa-edit</v-icon>
-                        <v-icon small @click="deleteItem(props.item.id)">far fa-times-square</v-icon>
-                    </td>
-                </template>
-                <template v-slot:no-results>
-                    <v-alert :value="true" color="error" icon="far fa-exclamation-circle" class="text-xs-center">
-                        Your search for "{{ search }}" found no results. 😵
-                    </v-alert>
-                </template>
-            </v-data-table>
-        </v-card>
-    </div>
+          <v-card-title>
+            Trim on hand
+          <v-spacer></v-spacer>
+          <v-text-field
+              v-model="search"
+              append-icon="far fa-search"
+              label="Search"
+              single-line
+              hide-details
+          ></v-text-field>
+          </v-card-title>
+          <v-data-table
+            :headers="headers"
+            :items="trim"
+            :search="search"
+            class="elevation-1"
+          >
+          <template v-slot:item.failed="{ item }">
+            <v-chip small :color="getColor(item.failed)" dark>{{ item.failed }}</v-chip>
+          </template>
+          <template v-slot:item.action="{ item }">
+            <v-icon
+              small
+              class="mr-2"
+              @click="editItem(item)"
+            >
+              far fa-edit
+            </v-icon>
+            <v-icon
+              small
+              @click="confirmModal(item.id)"
+              v-on="on"
+            >
+              far fa-times-square
+            </v-icon>
+          </template>
+        </v-data-table>
+      </v-card>
+      {{ editTrim }}
+      {{ typeof(editTrim.date) }}
+      <!-- edit dialog -->
+      <template>
+          <v-layout justify-center>
+            <v-dialog max-width="650" v-model="edit_dialog">
+              <v-card>
+                <v-card-title class="mb-5">
+                    <h3 class="secondary--text">Add Trim/Incoming Package</h3>
+                </v-card-title>
+                <v-card-text>
+                    <v-form class="px-3" ref="form">
+                        <v-text-field label="Shop" v-model="editTrim.shop" clearable></v-text-field>
+                        <v-text-field label="License #" v-model="editTrim.license"></v-text-field>
+                        <v-text-field label="Manifest #" v-model="editTrim.manifest" clearable></v-text-field>
+                        <v-text-field label="METRC Tags (Last 4) Comma seperated list for multiple values" v-model="editTrim.batch" clearable></v-text-field>
+                        <!-- <template v-if="$v.editTrim.batch.$error">
+                            <p class="error--text" v-if="!$v.editTrim.batch.required">Value required</p>
+                            <p class="error--text" v-if="!$v.editTrim.batch.minLength">4 digits required</p>
+                        </template> -->
+                        <v-text-field label="Strain" v-model="editTrim.strain" clearable></v-text-field>
+                        <v-text-field label="Weight (g)" v-model.trim="editTrim.weight" clearable></v-text-field>
+                        <v-text-field label="Trim/Bud/Live" v-model="editTrim.type" clearable></v-text-field>
+                        <v-text-field label="Input Date" v-model="editTrim.date" clearable></v-text-field>
+                        <v-layout row wrap>
+                            <v-flex xs12 sm4>
+                                <v-switch label="Failed?" v-model="editTrim.failed" color="primary"></v-switch>
+                            </v-flex>
+                            <v-flex xs12 sm8 class="text-right">
+                                <v-btn class="mr-2 mt-3" outlined color="error" @click="reset">Clear</v-btn>
+                                <v-btn class="mr-2 mt-3" outlined color="success" @click="edit_dialog = false">Cancel</v-btn>
+                                <v-btn text class="mr-2 mt-3 success" @click="updateItem" :loading="loading">Update</v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-form>
+                </v-card-text>
+              </v-card>
+          </v-dialog>
+          </v-layout>
+        </template>
+      <!-- delete dialog -->
+        <template>
+          <v-layout justify-center>
+            <v-dialog v-model="delete_dialog" persistent max-width="350">
+              <v-card>
+                <v-card-title class="subtitle-1 font-weight-light">Are you sure you want to delete this item?</v-card-title>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="error" text @click="dialog = false">Cancel</v-btn>
+                  <v-btn color="success" text @click="deleteItem">Yes</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-layout>
+        </template>
+      </v-container>
+  </div>
 </template>
 
 <script>
 import db from '@/firebase'
+// import { required, numeric, minLength } from 'vuelidate/lib/validators'
+import format from 'date-fns/format'
 
 export default {
     name: 'trim',
     data() {
         return {
             trim: [],
+            shopdata: [],
+            editTrim: {
+              shop: '',
+              license: '',
+              manifest: '',
+              batch: [],
+              strain: '',
+              weight: null,
+              failed: false,
+              type: '',
+              date: null
+            },
             search: '',
+            edit_dialog: false,
+            delete_dialog: false,
+            id: null,
             headers: [
                 { text: 'Shop Name', align: 'left', value: 'shop' },
                 { text: 'License #', value: 'license' },
@@ -63,13 +141,45 @@ export default {
             ]
         }
     },
+    // validations: {
+    //     trim: {
+    //         weight: {
+    //             required,
+    //             numeric
+    //         },
+    //         batch: {
+    //             required,
+    //             minLength: minLength(4)
+    //         }
+    //     }
+    // },
     methods: {
-        test(prop) {
-            alert(prop)
+        editItem(item) {
+          this.editTrim = Object.assign({}, item)
+          this.edit_dialog = true
         },
-        deleteItem(id) {
-            db.collection('trim').doc(id).delete()
-        }
+        updateItem() {
+          db.collection('trim').doc(this.editTrim.id).update(this.editTrim)
+            .then(() => {
+              this.edit_dialog = false
+            })
+        },
+        confirmModal(id) {
+          this.delete_dialog = true
+          this.id = id
+        },
+        deleteItem() {
+          db.collection('trim').doc(this.id).delete()
+          this.id = null
+          this.delete_dialog = false
+        },
+        getColor(item) {
+          if(item === true) return 'error'
+          else return 'success'
+        },
+        reset () {
+            this.$refs.form.reset()
+        },
     },
     created() {
         db.collection('trim').onSnapshot((res) => {
@@ -84,18 +194,16 @@ export default {
                     this.trim = this.trim.filter((item) => {
                         return item.id != change.doc.id
                     })
+                } else if(change.type === 'modified') {
+                  this.trim = this.trim.filter((item) => {
+                    return item.id != change.doc.id
+                  }) 
+                  this.trim.push({
+                    ...change.doc.data()
+                  })
                 }
             })
         })
     }
 }
 </script>
-
-<style scoped>
-    .false {
-        background-color: #3cd1c2;
-    }
-    .true {
-        background-color: #f83e70;
-    }
-</style>
