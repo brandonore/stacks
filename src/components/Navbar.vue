@@ -3,7 +3,7 @@
         <v-navigation-drawer
             v-model="drawer"
             app
-            color="secondary"
+            :color=navBgColor
             width="300"
         >
         <v-list dense>
@@ -26,7 +26,7 @@
             </v-flex>
             <v-list-item v-for="link in links" :key="link.text" :to="link.route" class="side-link">
                 <v-list-item-action>
-                    <v-icon color="white">{{ link.icon }}</v-icon>
+                    <v-icon small color="white">{{ link.icon }}</v-icon>
                 </v-list-item-action>
                 <v-list-item-content>
                     <v-list-item-title class="white--text">{{ link.text }}</v-list-item-title>
@@ -56,9 +56,8 @@
         <v-app-bar
             app
             light
-            text
-            elevation="0"
-            class="grey lighten-4 app-bar"
+            flat
+            class="app-bar"
         >
             <v-app-bar-nav-icon color="grey" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-divider
@@ -70,10 +69,34 @@
                 <span class="grey--text">MARSH</span>
                 <span class="success--text">MALLOW</span>
             </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <div class="text-center">
+                <v-menu transition="slide-x-transition" offset-y>
+                <template v-slot:activator="{ on }">
+                    <v-btn
+                    text
+                    color="primary"
+                    dark
+                    v-on="on"
+                    >
+                    Menu
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-item
+                    v-for="link in links"
+                    :key="link.text"
+                    :to="link.route"
+                    >
+                    <v-list-item-title>{{ link.text }}</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+                </v-menu>
+            </div>
         </v-app-bar>
         <v-content class="grey lighten-4">
             <v-container fluid>
-                <router-view></router-view>
+                <router-view v-on:reset-color="resetNavDrawerColor($event)" v-on:custom-color="changeNavDrawerColor($event)"></router-view>
             </v-container>
         </v-content>
     </v-app>
@@ -102,16 +125,22 @@ export default {
             { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'}
         ],
         drawer: null,
-        snackbar: false
+        snackbar: false,
+        navBgColor: '#373B5FFF'
     }),
+    methods: {
+        resetNavDrawerColor(color) {
+            this.navBgColor = color
+        },
+        changeNavDrawerColor(color) {
+            this.navBgColor = color
+        }
+    },
 }
 </script>
 
-<style>
+<style scoped>
     .side-link:hover {
         background: #3cd1c2;
-    }
-    .app-bar {
-        border-bottom: 2px solid black;
     }
 </style>

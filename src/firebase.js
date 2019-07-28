@@ -6,12 +6,13 @@ var firebaseConfig = {
     authDomain: "marshmallow-744b1.firebaseapp.com",
     databaseURL: "https://marshmallow-744b1.firebaseio.com",
     projectId: "marshmallow-744b1",
-    storageBucket: "",
+    storageBucket: "marshmallow-744b1.appspot.com",
     messagingSenderId: "692683414250",
     appId: "1:692683414250:web:26d71c8fe5ee8e2d"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore()
+const storage = firebase.storageBucket
 
-export default db
+export default { db, storage }

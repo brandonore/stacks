@@ -1,35 +1,33 @@
 <template>
-  <div class="calendar">
-    <h1 class="mb-4 secondary--text">Calendar</h1>
-    <v-divider class="mb-5"></v-divider>
-      <v-container>
-        <v-layout>
-          <v-flex>
-            <vue-cal
-              style="height: 100%"
-              class="vuecal--full-height-delete" 
-              ref="vuecal"
-              small
-              selected-date="2018-11-19"
-              :time-from="8 * 60"
-              :time-to="23 * 60"
-              :disable-views="['years', 'year']"
-              hide-weekends
-              editable-events
-              :events="events"
-              :dblclickToNavigate="false"
-              @event-delete="removeEvent($event)"
-            ></vue-cal>
-          </v-flex>
-        </v-layout>
-        <v-layout row class="mt-5">
-          <v-flex xs12 class="text-center">
-            <v-btn outlined color="alternate" @click="createEvent">Add Event</v-btn>
-          </v-flex>
-          {{ events }}
-        </v-layout>
-    </v-container>
-  </div>
+    <div class="calendar mx-3">
+        <h3 class="mb-4 secondary--text">Calendar</h3>
+        <v-divider class="mb-5"></v-divider>
+            <v-layout>
+            <v-flex>
+                <vue-cal
+                style="height: 100%"
+                class="vuecal--full-height-delete" 
+                ref="vuecal"
+                small
+                selected-date="2018-11-19"
+                :time-from="8 * 60"
+                :time-to="23 * 60"
+                :disable-views="['years', 'year']"
+                hide-weekends
+                editable-events
+                :events="events"
+                :dblclickToNavigate="false"
+                @event-delete="removeEvent($event)"
+                ></vue-cal>
+            </v-flex>
+            </v-layout>
+            <v-layout row class="mt-5">
+            <v-flex xs12 class="text-center">
+                <v-btn outlined color="alternate" @click="createEvent">Add Event</v-btn>
+            </v-flex>
+            {{ events }}
+            </v-layout>
+    </div>
 </template>
 
 <script>
@@ -37,44 +35,44 @@ import VueCal from 'vue-cal'
 import 'vue-cal/dist/vuecal.css'
 
 export default {
-  name: 'calendar',
-  components: {
+name: 'calendar',
+components: {
     VueCal
-  },
-  data() {
+},
+data() {
     return {
-      selectedEvent: null,
-      showEventCreationDialog: false,
-      eventsCssClasses: ['leisure', 'sport', 'health'],
-      events: [
+    selectedEvent: null,
+    showEventCreationDialog: false,
+    eventsCssClasses: ['leisure', 'sport', 'health'],
+    events: [
         {
-          start: '2018-11-20 14:00',
-          end: '2018-11-20 18:00',
-          title: 'Pick up supplies',
-          class: 'c_green'
+        start: '2018-11-20 14:00',
+        end: '2018-11-20 18:00',
+        title: 'Pick up supplies',
+        class: 'c_green'
         },
         {
-          start: '2018-11-22 10:00',
-          end: '2018-11-22 15:00',
-          title: 'Dankery Drop',
-          class: 'c_blue'
+        start: '2018-11-22 10:00',
+        end: '2018-11-22 15:00',
+        title: 'Dankery Drop',
+        class: 'c_blue'
         }
-      ]
+    ]
     }
-  },
-  methods: {
+},
+methods: {
     createEvent() {
-      this.events.push({
+    this.events.push({
         start: '2018-11-21 14:00',
-          end: '2018-11-21 18:00',
-          title: 'Pick up supplies',
-          class: 'c_green'
-      })
+        end: '2018-11-21 18:00',
+        title: 'Pick up supplies',
+        class: 'c_green'
+    })
     },
     removeEvent(event) {
-      this.events.pop(event)
+    this.events.pop(event)
     }
-  }
+}
 }
 </script>
 

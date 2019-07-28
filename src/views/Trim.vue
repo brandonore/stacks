@@ -1,54 +1,52 @@
 <template>
-  <div class="trim">
-    <h1 class="mb-4 secondary--text">Available Trim</h1>
-    <v-divider class="mb-5"></v-divider>
-      <v-container>
-        <v-card>
-          <v-card-title>
+    <div class="trim mx-3">
+        <h3 class="mb-4 secondary--text">Available Trim</h3>
+        <v-divider class="mb-5"></v-divider>
+        <v-card flat>
+            <v-card-title>
             Trim on hand
-          <v-spacer></v-spacer>
-          <v-text-field
-              v-model="search"
-              append-icon="far fa-search"
-              label="Search"
-              single-line
-              hide-details
-          ></v-text-field>
-          </v-card-title>
-          <v-data-table
+            <v-spacer></v-spacer>
+            <v-text-field
+                v-model="search"
+                append-icon="far fa-search"
+                label="Search"
+                single-line
+                hide-details
+            ></v-text-field>
+            </v-card-title>
+            <v-data-table
             :headers="headers"
             :items="trim"
             :search="search"
-            class="elevation-1"
-          >
-          <template v-slot:item.failed="{ item }">
+            >
+            <template v-slot:item.failed="{ item }">
             <v-chip small :color="getColor(item.failed)" dark>{{ item.failed }}</v-chip>
-          </template>
-          <template v-slot:item.action="{ item }">
+            </template>
+            <template v-slot:item.action="{ item }">
             <v-icon
-              small
-              class="mr-2"
-              @click="editItem(item)"
+                small
+                class="mr-2"
+                @click="editItem(item)"
             >
-              far fa-edit
+                far fa-edit
             </v-icon>
             <v-icon
-              small
-              @click="confirmModal(item.id)"
-              v-on="on"
+                small
+                @click="confirmModal(item.id)"
+                v-on="on"
             >
-              far fa-times-square
+                far fa-times-square
             </v-icon>
-          </template>
+            </template>
         </v-data-table>
-      </v-card>
-      {{ editTrim }}
-      {{ typeof(editTrim.date) }}
-      <!-- edit dialog -->
-      <template>
-          <v-layout justify-center>
+        </v-card>
+        <!-- {{ editTrim }}
+        {{ typeof(editTrim.date) }} -->
+        <!-- edit dialog -->
+        <template>
+            <v-layout justify-center>
             <v-dialog max-width="650" v-model="edit_dialog">
-              <v-card>
+                <v-card>
                 <v-card-title class="mb-5">
                     <h3 class="secondary--text">Add Trim/Incoming Package</h3>
                 </v-card-title>
@@ -78,27 +76,26 @@
                         </v-layout>
                     </v-form>
                 </v-card-text>
-              </v-card>
-          </v-dialog>
-          </v-layout>
+                </v-card>
+            </v-dialog>
+            </v-layout>
         </template>
-      <!-- delete dialog -->
+        <!-- delete dialog -->
         <template>
-          <v-layout justify-center>
+            <v-layout justify-center>
             <v-dialog v-model="delete_dialog" persistent max-width="350">
-              <v-card>
+                <v-card>
                 <v-card-title class="subtitle-1 font-weight-light">Are you sure you want to delete this item?</v-card-title>
                 <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="error" text @click="dialog = false">Cancel</v-btn>
-                  <v-btn color="success" text @click="deleteItem">Yes</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn color="error" text @click="delete_dialog = false">Cancel</v-btn>
+                    <v-btn color="success" text @click="deleteItem">Yes</v-btn>
                 </v-card-actions>
-              </v-card>
+                </v-card>
             </v-dialog>
-          </v-layout>
+            </v-layout>
         </template>
-      </v-container>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -107,103 +104,103 @@ import db from '@/firebase'
 import format from 'date-fns/format'
 
 export default {
-    name: 'trim',
-    data() {
-        return {
-            trim: [],
-            shopdata: [],
-            editTrim: {
-              shop: '',
-              license: '',
-              manifest: '',
-              batch: [],
-              strain: '',
-              weight: null,
-              failed: false,
-              type: '',
-              date: null
-            },
-            search: '',
-            edit_dialog: false,
-            delete_dialog: false,
-            id: null,
-            headers: [
-                { text: 'Shop Name', align: 'left', value: 'shop' },
-                { text: 'License #', value: 'license' },
-                { text: 'Date', value: 'date' },
-                { text: 'Manifest #', value: 'manifest' },
-                { text: 'METRC Tag (Last 4)', value: 'batch' },
-                { text: 'Strain Name', value: 'strain' },
-                { text: 'Weight (g)', value: 'weight' },
-                { text: 'Failed?', value: 'failed' },
-                { text: 'Trim/Bud/Live', value: 'type' },
-                { text: 'Actions', value: 'action', sortable: false },
-            ]
-        }
-    },
-    // validations: {
-    //     trim: {
-    //         weight: {
-    //             required,
-    //             numeric
-    //         },
-    //         batch: {
-    //             required,
-    //             minLength: minLength(4)
-    //         }
-    //     }
-    // },
-    methods: {
-        editItem(item) {
-          this.editTrim = Object.assign({}, item)
-          this.edit_dialog = true
+name: 'trim',
+data() {
+    return {
+        trim: [],
+        shopdata: [],
+        editTrim: {
+            shop: '',
+            license: '',
+            manifest: '',
+            batch: [],
+            strain: '',
+            weight: null,
+            failed: false,
+            type: '',
+            date: null
         },
-        updateItem() {
-          db.collection('trim').doc(this.editTrim.id).update(this.editTrim)
-            .then(() => {
-              this.edit_dialog = false
-            })
-        },
-        confirmModal(id) {
-          this.delete_dialog = true
-          this.id = id
-        },
-        deleteItem() {
-          db.collection('trim').doc(this.id).delete()
-          this.id = null
-          this.delete_dialog = false
-        },
-        getColor(item) {
-          if(item === true) return 'error'
-          else return 'success'
-        },
-        reset () {
-            this.$refs.form.reset()
-        },
-    },
-    created() {
-        db.collection('trim').onSnapshot((res) => {
-            const changes = res.docChanges()
-            changes.forEach((change) => {
-                if(change.type === 'added') {
-                    this.trim.push({
-                        ...change.doc.data(),
-                        id: change.doc.id
-                    })
-                } else if(change.type === 'removed') {
-                    this.trim = this.trim.filter((item) => {
-                        return item.id != change.doc.id
-                    })
-                } else if(change.type === 'modified') {
-                  this.trim = this.trim.filter((item) => {
-                    return item.id != change.doc.id
-                  }) 
-                  this.trim.push({
-                    ...change.doc.data()
-                  })
-                }
-            })
-        })
+        search: '',
+        edit_dialog: false,
+        delete_dialog: false,
+        id: null,
+        headers: [
+            { text: 'Shop Name', align: 'left', value: 'shop' },
+            { text: 'License #', value: 'license' },
+            { text: 'Date', value: 'date' },
+            { text: 'Manifest #', value: 'manifest' },
+            { text: 'METRC Tag (Last 4)', value: 'batch' },
+            { text: 'Strain Name', value: 'strain' },
+            { text: 'Weight (g)', value: 'weight' },
+            { text: 'Failed?', value: 'failed' },
+            { text: 'Trim/Bud/Live', value: 'type' },
+            { text: 'Actions', value: 'action', sortable: false },
+        ]
     }
+},
+// validations: {
+//     trim: {
+//         weight: {
+//             required,
+//             numeric
+//         },
+//         batch: {
+//             required,
+//             minLength: minLength(4)
+//         }
+//     }
+// },
+methods: {
+    editItem(item) {
+        this.editTrim = Object.assign({}, item)
+        this.edit_dialog = true
+    },
+    updateItem() {
+        db.collection('trim').doc(this.editTrim.id).update(this.editTrim)
+        .then(() => {
+            this.edit_dialog = false
+        })
+    },
+    confirmModal(id) {
+        this.delete_dialog = true
+        this.id = id
+    },
+    deleteItem() {
+        db.collection('trim').doc(this.id).delete()
+        this.id = null
+        this.delete_dialog = false
+    },
+    getColor(item) {
+        if(item === true) return 'error'
+        else return 'success'
+    },
+    reset () {
+        this.$refs.form.reset()
+    },
+},
+created() {
+    db.collection('trim').onSnapshot((res) => {
+        const changes = res.docChanges()
+        changes.forEach((change) => {
+            if(change.type === 'added') {
+                this.trim.push({
+                    ...change.doc.data(),
+                    id: change.doc.id
+                })
+            } else if(change.type === 'removed') {
+                this.trim = this.trim.filter((item) => {
+                    return item.id != change.doc.id
+                })
+            } else if(change.type === 'modified') {
+                this.trim = this.trim.filter((item) => {
+                return item.id != change.doc.id
+                }) 
+                this.trim.push({
+                ...change.doc.data()
+                })
+            }
+        })
+    })
+}
 }
 </script>

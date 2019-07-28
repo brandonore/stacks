@@ -1,50 +1,55 @@
 <template>
-  <div class="dashboard">
-    <h1 class="mb-4 secondary--text">Dashboard</h1>
+<div class="dashboard mx-3">
+    <h3 class="mb-4 secondary--text">Dashboard</h3>
     <v-divider class="mb-5"></v-divider>
-    <v-container>
-      <v-layout justify-space-between row wrap>
-      <v-flex xs12 sm6 md3 class="test-card">
-        <h4 class="mb-3 secondary--text">Package Count on hand:</h4>
-        <h2 class="text-xs-left">{{ packageCount }}</h2>
-      </v-flex>
-      <v-flex xs12 sm6 md3 class="test-card">
-        <h4 class="mb-3 secondary--text">Package Count on hand:</h4>
-        <h2 class="text-xs-left">{{ packageCount }}</h2>
-      </v-flex>
-      <v-flex xs12 sm6 md3 class="test-card">
-        <h4 class="mb-3 secondary--text">Package Count on hand:</h4>
-        <h2 class="text-xs-left">{{ packageCount }}</h2>
-      </v-flex>
-      <v-flex xs12 sm6 md3 class="test-card">
-        <h4 class="mb-3 secondary--text">Package Count on hand:</h4>
-        <h2 class="text-xs-left">{{ packageCount }}</h2>
-      </v-flex>
-    </v-layout>
-      <v-layout row justify-center class="mt-4">
-        <v-flex xs12 sm6 md4>
-          <v-card>
-            <v-card-title>
-              Test Chart
-            </v-card-title>
-            <v-card-text>
-              <LineChart :chartdata="planetChartData.data" :options="planetChartData.options" />
-            </v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex xs12 sm6 md4>
-          <v-card>
-            <v-card-title>
-              Test Chart 2
-            </v-card-title>
-            <v-card-text>
-              <BarChart :chartdata="barChartData.data" :options="barChartData.options" />
-            </v-card-text>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
+        <v-layout row justify-space-around>
+            <v-flex xs12 sm6 md3 class="test-card">
+                <h4 class="mb-3 secondary--text">Package Count on hand:</h4>
+                <h2 class="text-xs-left">{{ packageCount }}</h2>
+            </v-flex>
+            <v-flex xs12 sm6 md3 class="test-card">
+                <h4 class="mb-3 secondary--text">Package Count on hand:</h4>
+                <h2 class="text-xs-left">{{ packageCount }}</h2>
+            </v-flex>
+            <v-flex xs12 sm6 md3 class="test-card">
+                <h4 class="mb-3 secondary--text">Package Count on hand:</h4>
+                <h2 class="text-xs-left">{{ packageCount }}</h2>
+            </v-flex>
+        </v-layout>
+        <!-- <v-divider class="my-5"></v-divider> -->
+        <v-layout row justify-space-around class="mt-5">
+            <v-flex xs12 sm6 md3>
+            <v-card>
+                <v-card-title>
+                Test Chart
+                </v-card-title>
+                <v-card-text>
+                <LineChart :chartdata="planetChartData.data" :options="planetChartData.options" />
+                </v-card-text>
+            </v-card>
+            </v-flex>
+            <v-flex xs12 sm6 md3>
+            <v-card>
+                <v-card-title>
+                Test Chart 2
+                </v-card-title>
+                <v-card-text>
+                <BarChart :chartdata="barChartData.data" :options="barChartData.options" />
+                </v-card-text>
+            </v-card>
+            </v-flex>
+            <v-flex xs12 sm6 md3>
+            <v-card>
+                <v-card-title>
+                Test Chart 2
+                </v-card-title>
+                <v-card-text>
+                <BarChart :chartdata="barChartData.data" :options="barChartData.options" />
+                </v-card-text>
+            </v-card>
+            </v-flex>
+        </v-layout>
+</div>
 </template>
 
 <script>
