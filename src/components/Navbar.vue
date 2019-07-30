@@ -10,7 +10,8 @@
             <v-layout column align-center>
                 <v-flex class="mt-5 text-center">
                     <v-avatar size="100">
-                        <img src="../../public/shiina-av.png" alt="">
+                        <img v-if="avatarURL" :src="avatarURL" alt="avatar" class="avatar-image">
+                        <span v-else>😛</span>
                     </v-avatar>
                     <div class="white--text my-0 mt-4 subtitle-1 font-weight-light">
                         Logged in as:
@@ -96,7 +97,7 @@
         </v-app-bar>
         <v-content class="grey lighten-4">
             <v-container fluid>
-                <router-view v-on:reset-color="resetNavDrawerColor($event)" v-on:custom-color="changeNavDrawerColor($event)"></router-view>
+                <router-view v-on:reset-color="resetNavDrawerColor($event)" v-on:custom-color="changeNavDrawerColor($event)" v-on:avatar-url="setAvatar($event)"></router-view>
             </v-container>
         </v-content>
     </v-app>
@@ -126,7 +127,8 @@ export default {
         ],
         drawer: null,
         snackbar: false,
-        navBgColor: '#373B5FFF'
+        navBgColor: '#373B5FFF',
+        avatarURL: null
     }),
     methods: {
         resetNavDrawerColor(color) {
@@ -134,6 +136,9 @@ export default {
         },
         changeNavDrawerColor(color) {
             this.navBgColor = color
+        },
+        setAvatar(url) {
+            this.avatarURL = url
         }
     },
 }

@@ -21,12 +21,12 @@
                     ></v-select>
                     <v-text-field label="License #" v-model="trim.license"></v-text-field>
                     <v-text-field label="Manifest #" v-model="trim.manifest" clearable></v-text-field>
+                    <v-text-field label="Strain" v-model="trim.strain" clearable></v-text-field>
                     <v-text-field label="METRC Tags (Last 4) Comma seperated list for multiple values" v-model="$v.trim.batch.$model" clearable></v-text-field>
                     <template v-if="$v.trim.batch.$error">
                         <p class="error--text" v-if="!$v.trim.batch.required">Value required</p>
                         <p class="error--text" v-if="!$v.trim.batch.minLength">4 digits required</p>
                     </template>
-                    <v-text-field label="Strain" v-model="trim.strain" clearable></v-text-field>
                     <v-text-field label="Weight (g)" v-model.trim="trim.weight" clearable></v-text-field>
                     <v-text-field label="Trim/Bud/Live" v-model="trim.type" clearable></v-text-field>
                     <v-layout wrap>

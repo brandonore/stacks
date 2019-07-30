@@ -8,7 +8,7 @@
             <v-flex xs12 sm6 md3 class="layout1 text-center pa-5 white">
                 <v-hover v-slot:default="{ hover }">
                     <v-avatar size="200" class="ml-5 avatar">
-                        <img v-if="picture" :src="picture" alt="avatar" class="avatar-image">
+                        <img v-if="avatarURL" :src="avatarURL" alt="avatar" class="avatar-image">
                         <span v-else class="secondary--text headline">😛</span>
                         <v-fade-transition>
                             <div
@@ -26,8 +26,8 @@
                     </v-avatar>
                 </v-hover>
                 <input v-show="false" ref="avatarUpload" @change="uploadFile" type="file" accept="image/*" >
-                <v-flex class="text-center mt-5">
-                    <v-btn small outlined color="error">Remove</v-btn>
+                <v-flex class="text-center mt-5 ml-5">
+                    <v-btn small outlined color="error" @click="avatarURL = null">Remove</v-btn>
                 </v-flex>
             </v-flex>
             <v-flex xs12 sm6 md9 class="layout2 white pl-5">
@@ -82,7 +82,7 @@ export default {
                 value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
             ],
             avatar: null,
-            picture: null,
+            avatarURL: null,
             uploadPercent: null
         }
     },
@@ -97,7 +97,7 @@ export default {
             const metadata = { contentType: 'image/jpeg' }
             const uploadTask = storageRef.child('images/' + this.avatar.name).put(this.avatar, metadata)
             uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-                let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                let percentage = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
                 this.uploadPercent = percentage
                 console.log('Upload is ' + this.uploadPercent + '% done')
                 switch (snapshot.state) {
@@ -123,8 +123,8 @@ export default {
             }, () => {
                 this.uploadPercent = 100
                 uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                    this.picture = downloadURL
-                    console.log(downloadURL)
+                    this.avatarURL = downloadURL
+                    this.$emit('avatar-url', downloadURL)
                 })
             })
         }
@@ -154,8 +154,5 @@ export default {
     }
     .avatar {
         border: 1px solid rgba(55, 59, 95, 0.3);
-    }
-    .avatar-image {
-        object-fit: cover;
     }
 </style>
