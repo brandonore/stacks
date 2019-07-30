@@ -17,11 +17,9 @@
             <v-data-table
                 :headers="headers"
                 :items="extract"
-                :expanded.sync="expanded"
-                item-key="name"
+                item-key="id"
                 show-expand
-                :single-expand="singleExpand"
-                class="elevation-1"
+                single-expand="true"
             >
                 <template v-slot:top>
                     <v-toolbar flat color="white">
@@ -29,12 +27,34 @@
                         <v-spacer></v-spacer>
                     </v-toolbar>
                 </template>
+                <template v-slot:item.action="{ item }">
+                    <v-icon
+                        small
+                        class="mr-2"
+                        @click="moveExtractItem(item)"
+                    >
+                        far fa-arrow-to-right
+                    </v-icon>
+                    <v-icon
+                        small
+                        class="mr-2"
+                        @click="editExtract(item)"
+                    >
+                        far fa-edit
+                    </v-icon>
+                    <v-icon
+                        small
+                        @click="deleteItem(item.id)"
+                        v-on="on"
+                    >
+                        far fa-times-square
+                    </v-icon>
+                </template>
                 <template v-slot:expanded-item="{ item }">
-                    <td :colspan="headers.length">{{ item.notes }}</td>
+                    <td :colspan="headers.length + 1">{{ item.notes }}</td>
                 </template>
             </v-data-table>
         </v-card>
-        <!-- {{ extract.doc[0].id }} -->
     </div>
 </template>
 
@@ -49,8 +69,6 @@ export default {
         return {
             extract: [],
             editExtract: {},
-            expanded: [],
-            singleExpand: true,
             search: '',
             edit_dialog: false,
             delete_dialog: false,
@@ -72,6 +90,37 @@ export default {
                 { text: 'Actions', value: 'action' }
             ]
         }
+    },
+    methods: {
+        moveExtractItem(item) {
+
+        },
+        editItem(item) {
+            this.editExtract = Object.assign({}, item)
+            this.edit_dialog = true
+        },
+        updateItem() {
+            db.collection('trim').doc(this.editExtract.id).update(this.editExtract)
+            .then(() => {
+                this.edit_dialog = false
+            })
+        },
+        confirmModal(id) {
+            this.delete_dialog = true
+            this.id = id
+        },
+        deleteItem() {
+            db.collection('extract').doc(this.id).delete()
+            this.id = null
+            this.delete_dialog = false
+        },
+        getColor(item) {
+            if(item === true) return 'error'
+            else return 'success'
+        },
+        reset () {
+            this.$refs.form.reset()
+        },
     },
     created() {
         db.collection('extract').onSnapshot((res) => {
@@ -99,3 +148,11 @@ export default {
     }
 }
 </script>
+
+<style>
+    .theme--light.v-data-table tbody tr.expanded.expanded__content {
+        box-shadow: none;
+        background-color: #373B5F;
+        color: white;
+    }
+</style>

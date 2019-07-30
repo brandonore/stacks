@@ -67,8 +67,8 @@
                 inset
             ></v-divider>
             <v-toolbar-title>
-                <span class="grey--text">MARSH</span>
-                <span class="success--text">MALLOW</span>
+                <span class="success--text">STACKS</span>
+                <!-- <span class="success--text">CKS</span> -->
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <div class="text-center">
