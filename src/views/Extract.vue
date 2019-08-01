@@ -4,8 +4,6 @@
         <v-divider class="mb-5"></v-divider>
         <v-card flat>
             <v-card-title>
-            Trim on hand
-                <v-spacer></v-spacer>
                 <v-text-field
                     v-model="search"
                     append-icon="far fa-search"
@@ -19,36 +17,48 @@
                 :items="extract"
                 item-key="id"
                 show-expand
-                single-expand="true"
+                :single-expand="singleExpand"
+                :search="search"
             >
-                <template v-slot:top>
-                    <v-toolbar flat color="white">
-                        <v-toolbar-title>Extraction</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                    </v-toolbar>
-                </template>
                 <template v-slot:item.action="{ item }">
-                    <v-icon
-                        small
-                        class="mr-2"
-                        @click="moveExtractItem(item)"
-                    >
-                        far fa-arrow-to-right
-                    </v-icon>
-                    <v-icon
-                        small
-                        class="mr-2"
-                        @click="editExtract(item)"
-                    >
-                        far fa-edit
-                    </v-icon>
-                    <v-icon
-                        small
-                        @click="deleteItem(item.id)"
-                        v-on="on"
-                    >
-                        far fa-times-square
-                    </v-icon>
+                    <v-tooltip left>
+                        <template v-slot:activator="{ on }">
+                            <v-icon
+                                v-on="on"
+                                small
+                                class="mr-2"
+                                @click="moveExtractItem(item)"
+                            >
+                                fas fa-arrow-to-right
+                            </v-icon>
+                        </template>
+                        <span>Move to Packaging</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                            <v-icon
+                                v-on="on"
+                                small
+                                class="mr-2"
+                                @click="confirmModal(item.id)"
+                            >
+                                fas fa-pencil
+                            </v-icon>
+                        </template>
+                        <span>Edit Item</span>
+                    </v-tooltip>
+                    <v-tooltip left>
+                        <template v-slot:activator="{ on }">
+                            <v-icon
+                                v-on="on"
+                                small
+                                @click="deleteItem(item.id)"
+                            >
+                                fas fa-times
+                            </v-icon>
+                        </template>
+                        <span>Delete Item</span>
+                    </v-tooltip>
                 </template>
                 <template v-slot:expanded-item="{ item }">
                     <td :colspan="headers.length + 1">{{ item.notes }}</td>
@@ -68,6 +78,7 @@ export default {
     data() {
         return {
             extract: [],
+            singleExpand: true,
             editExtract: {},
             search: '',
             edit_dialog: false,
@@ -152,7 +163,7 @@ export default {
 <style>
     .theme--light.v-data-table tbody tr.expanded.expanded__content {
         box-shadow: none;
-        background-color: #373B5F;
-        color: white;
+        background-color: white;
+        color: #5969FF;
     }
 </style>

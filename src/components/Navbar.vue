@@ -5,6 +5,7 @@
             app
             :color=navBgColor
             width="300"
+            v-if="user"
         >
         <v-list dense>
             <v-layout column align-center>
@@ -17,7 +18,7 @@
                         Logged in as:
                     </div>
                     <div class="white--text font-weight-bold title">
-                        y2ktheory
+                        {{ user.email }}
                     </div>
                 </v-flex>
             </v-layout>
@@ -45,7 +46,7 @@
                 </v-layout>
                 <v-layout row wrap xs12 class="mt-5">
                     <v-flex class="text-center">
-                        <v-btn text color="white" class="px-3 mt-3">
+                        <v-btn text color="white" class="px-3 mt-3" @click="signOut">
                             <span>Sign Out</span>
                             <v-icon right>far fa-sign-out-alt</v-icon>
                         </v-btn>
@@ -60,11 +61,12 @@
             flat
             class="app-bar"
         >
-            <v-app-bar-nav-icon color="grey" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon color="grey" @click.stop="drawer = !drawer" v-if="user"></v-app-bar-nav-icon>
             <v-divider
                 class="mx-4"
                 vertical
                 inset
+                v-if="user"
             ></v-divider>
             <v-toolbar-title>
                 <span class="success--text">STACKS</span>
@@ -72,7 +74,7 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <div class="text-center">
-                <v-menu transition="slide-x-transition" offset-y>
+                <v-menu transition="slide-x-transition" offset-y v-if="user">
                 <template v-slot:activator="{ on }">
                     <v-btn
                     text
@@ -104,6 +106,7 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 import AddTrim from './AddTrim'
 import AddShopData from './AddShopData'
 
@@ -125,6 +128,7 @@ export default {
             { icon: 'fas fa-calendar-day', text: 'Calendar', route: '/calendar' },
             { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'}
         ],
+        user: null,
         drawer: null,
         snackbar: false,
         navBgColor: '#373B5FFF',
@@ -139,8 +143,26 @@ export default {
         },
         setAvatar(url) {
             this.avatarURL = url
+        },
+        signOut() {
+            firebase.auth().signOut().then(() => {
+                console.log('signed out successfully')
+                this.drawer = null
+                this.$router.replace('/login')
+            })
+            
         }
     },
+    created() {
+        firebase.auth().onAuthStateChanged(user => {
+            if(user) {
+                this.user = user
+                console.log(user)
+            } else {
+                this.user = null
+            }
+        })
+    }
 }
 </script>
 

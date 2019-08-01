@@ -23,20 +23,31 @@
             <v-chip small :color="getColor(item.failed)" dark>{{ item.failed }}</v-chip>
             </template>
             <template v-slot:item.action="{ item }">
-            <v-icon
-                small
-                class="mr-2"
-                @click="editItem(item)"
-            >
-                far fa-edit
-            </v-icon>
-            <v-icon
-                small
-                @click="confirmModal(item.id)"
-                v-on="on"
-            >
-                far fa-times-square
-            </v-icon>
+            <v-tooltip left>
+                <template v-slot:activator="{ on }">
+                    <v-icon
+                        v-on="on"
+                        small
+                        class="mr-2"
+                        @click="confirmModal(item.id)"
+                    >
+                        fas fa-pencil
+                    </v-icon>
+                </template>
+                <span>Edit Item</span>
+                </v-tooltip>
+                <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                        <v-icon
+                            v-on="on"
+                            small
+                            @click="deleteItem(item.id)"
+                        >
+                            fas fa-times
+                        </v-icon>
+                    </template>
+                    <span>Delete Item</span>
+                </v-tooltip>
             </template>
         </v-data-table>
         </v-card>
