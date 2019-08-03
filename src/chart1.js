@@ -21,8 +21,10 @@ export const planetChartData = {
     },
     options: {
         legend: {
-            position: "bottom"
+            position: "bottom",
         },
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
             yAxes: [{
                 ticks: {

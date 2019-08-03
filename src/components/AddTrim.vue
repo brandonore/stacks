@@ -27,7 +27,11 @@
                         <p class="error--text" v-if="!$v.trim.batch.required">Value required</p>
                         <p class="error--text" v-if="!$v.trim.batch.minLength">4 digits required</p>
                     </template>
-                    <v-text-field label="Weight (g)" v-model.trim="trim.weight" clearable></v-text-field>
+                    <v-text-field label="Weight (g)" v-model="$v.trim.weight.$model" clearable></v-text-field>
+                    <template v-if="$v.trim.weight.$error">
+                        <p class="error--text" v-if="!$v.trim.weight.required">Value required</p>
+                        <p class="error--text" v-if="!$v.trim.weight.numeric">Numbers only</p>
+                    </template>
                     <v-text-field label="Trim/Bud/Live" v-model="trim.type" clearable></v-text-field>
                     <v-layout wrap>
                         <v-flex xs12>
@@ -70,7 +74,7 @@ export default {
                 manifest: '',
                 batch: [],
                 strain: '',
-                weight: null,
+                weight: '',
                 failed: false,
                 type: '',
                 date: null
@@ -100,6 +104,7 @@ export default {
             }
         },
         clearBatch() {
+            this.loading = false
             this.trim.batch = []
         },
         populateLicense(shopname, license) {
@@ -108,6 +113,7 @@ export default {
         },
         reset () {
             this.$refs.form.reset()
+            this.loading = false
             this.trim.batch = []
         },
         submit() {
@@ -120,7 +126,7 @@ export default {
                     manifest: this.trim.manifest,
                     batch: this.trim.batch,
                     strain: this.trim.strain,
-                    weight: this.trim.weight,
+                    weight: Number(this.trim.weight),
                     failed: this.trim.failed,
                     type: this.trim.type,
                     date: format(this.trim.date, 'MMM Do YYYY')
@@ -134,7 +140,7 @@ export default {
                         manifest: '',
                         batch: [],
                         strain: '',
-                        weight: null,
+                        weight: '',
                         failed: false,
                         type: '',
                         date: null

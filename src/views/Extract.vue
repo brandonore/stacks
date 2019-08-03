@@ -163,7 +163,7 @@ export default {
 <style>
     .theme--light.v-data-table tbody tr.expanded.expanded__content {
         box-shadow: none;
-        background-color: white;
-        color: #5969FF;
+        background-color: #373B5F;
+        color: #fff;
     }
 </style>

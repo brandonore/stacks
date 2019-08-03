@@ -29,7 +29,7 @@
                         v-on="on"
                         small
                         class="mr-2"
-                        @click="confirmModal(item.id)"
+                        @click="editItem(item)"
                     >
                         fas fa-pencil
                     </v-icon>
@@ -41,7 +41,7 @@
                         <v-icon
                             v-on="on"
                             small
-                            @click="deleteItem(item.id)"
+                            @click="confirmModal(item.id)"
                         >
                             fas fa-times
                         </v-icon>
@@ -51,8 +51,6 @@
             </template>
         </v-data-table>
         </v-card>
-        <!-- {{ editTrim }}
-        {{ typeof(editTrim.date) }} -->
         <!-- edit dialog -->
         <template>
             <v-layout justify-center>
@@ -135,6 +133,7 @@ data() {
         edit_dialog: false,
         delete_dialog: false,
         id: null,
+        loading: null,
         headers: [
             { text: 'Shop Name', align: 'left', value: 'shop' },
             { text: 'License #', value: 'license' },

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import firebase from 'firebase'
+import NProgress from 'nprogress'
 
 import Dashboard from './views/Dashboard'
 import Trim from './views/Trim'
@@ -10,6 +11,8 @@ import Settings from './views/Settings'
 import Calendar from './views/Calendar'
 import Login from './views/Login'
 import Signup from './views/Signup'
+
+import '../node_modules/nprogress/nprogress.css'
 
 Vue.use(Router)
 
@@ -90,9 +93,19 @@ router.beforeEach((to, from, next) => {
     const currentUser = firebase.auth().currentUser
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
-    if(requiresAuth && !currentUser) next('login')
-    else if(!requiresAuth && currentUser) next('dashboard')
-    else next()
+    // NProgress.start()
+
+    if(requiresAuth && !currentUser) {
+        next('login')
+    } else if(!requiresAuth && currentUser) {
+        next('dashboard')
+    } else {
+        next()
+    }
 })
+
+// router.afterEach((to, from) => {
+//     NProgress.done()
+// })
 
 export default router
