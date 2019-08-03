@@ -12,6 +12,8 @@ export const barChartData = {
         }]
     },
     options: {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
             xAxes: [{
                 ticks: {
