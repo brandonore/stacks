@@ -4,8 +4,6 @@
         <v-divider class="mb-5"></v-divider>
         <v-card flat>
             <v-card-title>
-            Trim on hand
-            <v-spacer></v-spacer>
             <v-text-field
                 v-model="search"
                 append-icon="far fa-search"
@@ -61,18 +59,41 @@
                 </v-card-title>
                 <v-card-text>
                     <v-form class="px-3" ref="form">
-                        <v-text-field label="Shop" v-model="editTrim.shop" clearable></v-text-field>
-                        <v-text-field label="License #" v-model="editTrim.license"></v-text-field>
-                        <v-text-field label="Manifest #" v-model="editTrim.manifest" clearable></v-text-field>
-                        <v-text-field label="METRC Tags (Last 4) Comma seperated list for multiple values" v-model="editTrim.batch" clearable></v-text-field>
-                        <!-- <template v-if="$v.editTrim.batch.$error">
-                            <p class="error--text" v-if="!$v.editTrim.batch.required">Value required</p>
-                            <p class="error--text" v-if="!$v.editTrim.batch.minLength">4 digits required</p>
-                        </template> -->
-                        <v-text-field label="Strain" v-model="editTrim.strain" clearable></v-text-field>
-                        <v-text-field label="Weight (g)" v-model.trim="editTrim.weight" clearable></v-text-field>
-                        <v-text-field label="Trim/Bud/Live" v-model="editTrim.type" clearable></v-text-field>
-                        <v-text-field label="Input Date" v-model="editTrim.date" clearable></v-text-field>
+                        <v-text-field label="Shop" v-model="$v.editTrim.shop.$model" clearable></v-text-field>
+                        <template v-if="$v.editTrim.shop.$error">
+                            <span class="error--text" v-if="!$v.editTrim.shop.required">Value required</span>
+                        </template>
+                        <v-text-field label="License #" v-model="$v.editTrim.license.$model" clearable></v-text-field>
+                        <template v-if="$v.editTrim.license.$error">
+                            <span class="error--text" v-if="!$v.editTrim.license.required">Value required</span>
+                        </template>
+                        <v-text-field label="Manifest #" v-model="$v.editTrim.manifest.$model" clearable></v-text-field>
+                        <template v-if="$v.editTrim.manifest.$error">
+                            <span class="error--text" v-if="!$v.editTrim.manifest.required">Value required</span>
+                        </template>
+                        <v-text-field label="Strain" v-model="$v.editTrim.strain.$model" clearable></v-text-field>
+                        <template v-if="$v.editTrim.strain.$error">
+                            <span class="error--text" v-if="!$v.editTrim.strain.required">Value required</span>
+                        </template>
+                        <v-text-field label="METRC Tags (Last 4) Comma seperated list for multiple values" v-model="$v.editTrim.batch.$model" clearable></v-text-field>
+                        <template v-if="$v.editTrim.batch.$error">
+                            <span class="error--text" v-if="!$v.editTrim.batch.required">Value required</span>
+                            <span class="error--text" v-if="!$v.editTrim.batch.minLength">4 digits required</span><br>
+                            <span class="error--text" v-if="!$v.editTrim.batch.numeric">Numbers only</span>
+                        </template>
+                        <v-text-field label="Weight (g)" v-model="$v.editTrim.weight.$model" clearable></v-text-field>
+                        <template v-if="$v.editTrim.weight.$error">
+                            <span class="error--text" v-if="!$v.editTrim.weight.required">Value required</span>
+                            <span class="error--text" v-if="!$v.editTrim.weight.numeric">Numbers only</span>
+                        </template>
+                        <v-text-field label="Trim/Bud/Live" v-model="$v.editTrim.type.$model" clearable></v-text-field>
+                        <template v-if="$v.editTrim.type.$error">
+                            <span class="error--text" v-if="!$v.editTrim.type.required">Value required</span>
+                        </template>
+                        <v-text-field label="Input Date" v-model="$v.editTrim.date.$model" clearable></v-text-field>
+                        <template v-if="$v.editTrim.date.$error">
+                            <span class="error--text" v-if="!$v.editTrim.date.required">Value required</span>
+                        </template>
                         <v-layout row wrap>
                             <v-flex xs12 sm4>
                                 <v-switch label="Failed?" v-model="editTrim.failed" color="primary"></v-switch>
@@ -109,7 +130,7 @@
 
 <script>
 import db from '@/firebase'
-// import { required, numeric, minLength } from 'vuelidate/lib/validators'
+import { required, numeric, minLength } from 'vuelidate/lib/validators'
 import format from 'date-fns/format'
 
 export default {
@@ -148,24 +169,44 @@ data() {
         ]
     }
 },
-// validations: {
-//     trim: {
-//         weight: {
-//             required,
-//             numeric
-//         },
-//         batch: {
-//             required,
-//             minLength: minLength(4)
-//         }
-//     }
-// },
+validations: {
+        editTrim: {
+            shop: {
+                required
+            },
+            license: {
+                required
+            },
+            manifest: {
+                required
+            },
+            strain: {
+                required
+            },
+            weight: {
+                required,
+                numeric
+            },
+            batch: {
+                required,
+                minLength: minLength(4),
+                numeric
+            },
+            type: {
+                required
+            },
+            date: {
+                required
+            }
+        }
+    },
 methods: {
     editItem(item) {
         this.editTrim = Object.assign({}, item)
         this.edit_dialog = true
     },
     updateItem() {
+        this.editTrim.weight = Number(this.editTrim.weight)
         db.collection('trim').doc(this.editTrim.id).update(this.editTrim)
         .then(() => {
             this.edit_dialog = false

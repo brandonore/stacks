@@ -1,7 +1,7 @@
 <template>
     <div class="login mx-3">
         <v-layout row justify-center>
-            <v-card class="pa-5" flat width="650">
+            <v-card class="pa-5" flat >
                 <h3 class="mb-4 secondary--text text-center">Login</h3>
                 <v-form
                     ref="form"

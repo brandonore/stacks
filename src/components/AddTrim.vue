@@ -3,7 +3,7 @@
         <template v-slot:activator="{ on }">
             <v-btn v-on="on" text color="white" class="success">Trim <v-icon right>fal fa-plus</v-icon></v-btn>
         </template>
-        <v-card>
+        <v-card class="pa-5">
             <v-card-title class="mb-5">
                 <h3 class="secondary--text">Add Trim/Incoming Package</h3>
             </v-card-title>
@@ -13,34 +13,49 @@
                         label="Select Shop"
                         :items="shopdata"
                         item-text="shopname"
-                        v-model="trim.shop"
-                        clearable
+                        v-model="$v.trim.shop.$model"
                         return-object
                         offset-y
                         @change="populateLicense(trim.shop.shopname, trim.shop.license)"
                     ></v-select>
-                    <v-text-field label="License #" v-model="trim.license"></v-text-field>
-                    <v-text-field label="Manifest #" v-model="trim.manifest" clearable></v-text-field>
-                    <v-text-field label="Strain" v-model="trim.strain" clearable></v-text-field>
+                    <template v-if="$v.trim.shop.$error">
+                        <span class="error--text" v-if="!$v.trim.shop.required">Value required</span>
+                    </template>
+                    <v-text-field label="License #" v-model="trim.license" clearable></v-text-field>
+                    <v-text-field label="Manifest #" v-model="$v.trim.manifest.$model" clearable></v-text-field>
+                    <template v-if="$v.trim.manifest.$error">
+                        <span class="error--text" v-if="!$v.trim.manifest.required">Value required</span>
+                    </template>
+                    <v-text-field label="Strain" v-model="$v.trim.strain.$model" clearable></v-text-field>
+                    <template v-if="$v.trim.strain.$error">
+                        <span class="error--text" v-if="!$v.trim.strain.required">Value required</span>
+                    </template>
                     <v-text-field label="METRC Tags (Last 4) Comma seperated list for multiple values" v-model="$v.trim.batch.$model" clearable></v-text-field>
                     <template v-if="$v.trim.batch.$error">
-                        <p class="error--text" v-if="!$v.trim.batch.required">Value required</p>
-                        <p class="error--text" v-if="!$v.trim.batch.minLength">4 digits required</p>
+                        <span class="error--text" v-if="!$v.trim.batch.required">Value required</span>
+                        <span class="error--text" v-if="!$v.trim.batch.minLength">4 digits required</span><br>
+                        <span class="error--text" v-if="!$v.trim.batch.numeric">Numbers only</span>
                     </template>
                     <v-text-field label="Weight (g)" v-model="$v.trim.weight.$model" clearable></v-text-field>
                     <template v-if="$v.trim.weight.$error">
-                        <p class="error--text" v-if="!$v.trim.weight.required">Value required</p>
-                        <p class="error--text" v-if="!$v.trim.weight.numeric">Numbers only</p>
+                        <span class="error--text" v-if="!$v.trim.weight.required">Value required</span>
+                        <span class="error--text" v-if="!$v.trim.weight.numeric">Numbers only</span>
                     </template>
-                    <v-text-field label="Trim/Bud/Live" v-model="trim.type" clearable></v-text-field>
+                    <v-text-field label="Trim/Bud/Live" v-model="$v.trim.type.$model" clearable></v-text-field>
+                    <template v-if="$v.trim.type.$error">
+                        <span class="error--text" v-if="!$v.trim.type.required">Value required</span>
+                    </template>
                     <v-layout wrap>
                         <v-flex xs12>
                             <v-menu offset-y transition="slide-x-transition" min-width="290px">
                                 <template v-slot:activator="{ on }">
                                     <v-text-field :value="formattedDate" v-on="on" label="Input Date" clearable></v-text-field>
                                 </template>
-                                <v-date-picker show-current landscape v-model="trim.date"></v-date-picker>
+                                <v-date-picker show-current landscape v-model="$v.trim.date.$model"></v-date-picker>
                             </v-menu>
+                            <template v-if="$v.trim.date.$error">
+                                <span class="error--text" v-if="!$v.trim.date.required">Value required</span>
+                            </template>
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
@@ -48,8 +63,8 @@
                             <v-switch label="Failed?" v-model="trim.failed" color="primary"></v-switch>
                         </v-flex>
                         <v-flex xs12 sm8 class="text-right">
-                            <v-btn class="mr-2 mt-3" outlined color="error" @click="reset">Clear</v-btn>
-                            <v-btn class="mr-2 mt-3" outlined color="success" @click="dialog = false">Cancel</v-btn>
+                            <v-btn class="mr-2 mt-3" depressed color="error" @click="reset">Clear</v-btn>
+                            <v-btn class="mr-2 mt-3" outlined color="error" @click="dialog = false">Cancel</v-btn>
                             <v-btn text class="mr-2 mt-3 success" @click="submit" :loading="loading">Add</v-btn>
                         </v-flex>
                     </v-layout>
@@ -86,13 +101,29 @@ export default {
     },
     validations: {
         trim: {
+            shop: {
+                required
+            },
+            manifest: {
+                required
+            },
+            strain: {
+                required
+            },
             weight: {
                 required,
                 numeric
             },
             batch: {
                 required,
-                minLength: minLength(4)
+                minLength: minLength(4),
+                numeric
+            },
+            type: {
+                required
+            },
+            date: {
+                required
             }
         }
     },
@@ -146,6 +177,7 @@ export default {
                         date: null
                     }
                 })
+                this.$root.$emit('set-snackbar', true)
             } else {
                 return
             }

@@ -3,7 +3,7 @@
         <template v-slot:activator="{ on }">
             <v-btn class="white--text pa-3" v-on="on" outlined>Shop <v-icon right>fal fa-plus</v-icon></v-btn>
         </template>
-        <v-card>
+        <v-card class="pa-5">
             <v-card-title class="mb-5">
                 <h3 class="secondary--text">Add a new shop</h3>
             </v-card-title>

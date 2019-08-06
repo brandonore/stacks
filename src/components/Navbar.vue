@@ -99,9 +99,25 @@
         </v-app-bar>
         <v-content class="grey lighten-4">
             <v-container fluid>
-                <router-view v-on:reset-color="resetNavDrawerColor($event)" v-on:custom-color="changeNavDrawerColor($event)" v-on:avatar-url="setAvatar($event)"></router-view>
+                <router-view v-on:reset-color="resetNavDrawerColor($event)" v-on:custom-color="changeNavDrawerColor($event)"></router-view>
             </v-container>
         </v-content>
+        <v-snackbar
+            v-model="snackbar"
+            color="success"
+            :timeout="timeout"
+            bottom
+            text
+        >
+            Item added successfully
+            <v-btn
+                color="white"
+                text
+                @click="snackbar = false"
+            >
+                Close
+            </v-btn>
+        </v-snackbar>
     </v-app>
 </template>
 
@@ -130,7 +146,8 @@ export default {
         ],
         user: null,
         drawer: null,
-        snackbar: false,
+        snackbar: true,
+        timeout: 4000,
         navBgColor: '#373B5FFF',
         avatarURL: null
     }),
@@ -143,6 +160,10 @@ export default {
         },
         setAvatar(url) {
             this.avatarURL = url
+        },
+        setSnackbar() {
+            this.snackbar = true
+            console.log(this.snackbar)
         },
         signOut() {
             firebase.auth().signOut().then(() => {
@@ -161,6 +182,11 @@ export default {
             } else {
                 this.user = null
             }
+        })
+    },
+    mounted() {
+        this.$root.$on('set-snackbar', (val) => {
+            this.snackbar = val
         })
     }
 }

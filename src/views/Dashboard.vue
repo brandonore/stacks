@@ -122,11 +122,6 @@ export default {
             planetChartData,
             barChartData,
             doughnutChartData,
-            items: [
-                { title: 'Package count', num: '11' },
-                { title: 'Total package weight', num: '20,308g' },
-                { title: 'Slabs on rack', num: '8' }
-            ],
             height: 400
         }
     },

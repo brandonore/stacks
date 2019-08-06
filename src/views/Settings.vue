@@ -3,37 +3,38 @@
         <h3 class="mb-4 secondary--text">Settings</h3>
         <v-divider class="mb-5"></v-divider>
         <!-- profile info -->
-        <v-container fluid>
+        <v-container fluid grid-list-xl>
             <v-layout wrap>
-            <v-flex xs12 sm6 md3 class="layout1 text-center pa-5 white">
-                <v-hover v-slot:default="{ hover }">
-                    <v-avatar size="200" class="ml-5 avatar">
-                        <img v-if="avatarURL" :src="avatarURL" alt="avatar" class="avatar-image">
-                        <span v-else class="secondary--text headline">😛</span>
-                        <v-fade-transition>
-                            <div
-                                v-if="hover"
-                                class="d-flex transition-fast-in-fast-out secondary v-card--reveal white--text subtitle-1"
-                                style="height: 100%;"
-                            >
-                                Change 
-                                Avatar
-                            </div>
-                        </v-fade-transition>
-                        <v-btn absolute right top fab dark small color="pink" class="mt-5">
-                            <v-icon @click="$refs.avatarUpload.click()" dark>fal fa-plus</v-icon>
-                        </v-btn>
-                    </v-avatar>
-                </v-hover>
-                <input v-show="false" ref="avatarUpload" @change="uploadFile" type="file" accept="image/*" >
-                <v-flex class="text-center mt-5 ml-5">
-                    <v-btn small outlined color="error" @click="avatarURL = null">Remove</v-btn>
+                <v-flex d-flex xs12 sm6 md3 class="text-center white pa-5">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-avatar size="200" class="ml-5 avatar">
+                            <img v-if="!avatar" :src="avatarURL" alt="avatar" class="avatar-image">
+                            <span v-else class="secondary--text headline">😛</span>
+                            <v-fade-transition>
+                                <div
+                                    v-if="hover"
+                                    class="d-flex transition-fast-in-fast-out secondary v-card--reveal white--text subtitle-1"
+                                    style="height: 100%;"
+                                >
+                                    Change 
+                                    Avatar
+                                </div>
+                            </v-fade-transition>
+                            <v-btn absolute right top fab dark small color="pink" class="mt-5">
+                                <v-icon @click="$refs.avatarUpload.click()" dark>fal fa-plus</v-icon>
+                            </v-btn>
+                        </v-avatar>
+                    </v-hover>
+                    <input v-show="false" ref="avatarUpload" @change="uploadFile" type="file" accept="image/*" >
+                    <v-flex d-flex class="text-center mt-5 ml-5">
+                        <v-btn small outlined color="error" @click="removeAvatar">Remove</v-btn>
+                    </v-flex>
                 </v-flex>
-            </v-flex>
-            <v-flex xs12 sm6 md9 class="layout2 white pl-5">
-                <div class="text-left secondary--text text-uppercase pt-3 title">Profile Settings</div>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea minus nulla ab sint sunt necessitatibus enim, ipsa debitis placeat aspernatur!
-            </v-flex>
+                <v-flex xs12 sm6 md9 class="layout2 white pl-5">
+                    <div class="text-left secondary--text text-uppercase pt-3 title">Profile Settings</div>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea minus nulla ab sint sunt necessitatibus enim, ipsa debitis placeat aspernatur!
+                </v-flex>
+                <v-btn small outlined color="error" @click="logData">Log user data</v-btn>
             </v-layout>
             <!-- other settings -->
             <v-layout wrap class="mt-3">
@@ -57,8 +58,8 @@
                         </v-card-actions>
                     </v-card>
                 </v-flex>
-                <v-flex xs12 sm6>
-                    <v-card flat>
+                <v-flex d-flex xs12 sm6>
+                    <v-card flat class="pa-5">
                         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa esse possimus odit cupiditate mollitia! Quis ullam illum maxime modi 
                         esse doloribus neque labore, fugiat non facilis odit quisquam vel quidem.
                     </v-card>
@@ -70,6 +71,10 @@
 
 <script>
 import firebase from 'firebase'
+import { userInfo } from 'os';
+import { POINT_CONVERSION_COMPRESSED } from 'constants';
+
+let user = firebase.auth().currentUser
 
 export default {
     data() {
@@ -82,13 +87,25 @@ export default {
                 value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
             ],
             avatar: null,
-            avatarURL: null,
             uploadPercent: null
         }
     },
     methods: {
         resetColor() {
             this.color = '#373B5FFF'
+        },
+        removeAvatar() {
+            user.updateProfile({
+                photoURL: null
+            }).then(() => {
+                console.log('Remove successful', user.photoURL)
+                this.avatarURL = null
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
+        logData() {
+            console.log(user.photoURL)
         },
         uploadFile(event) {
             // get file from input
@@ -123,8 +140,15 @@ export default {
             }, () => {
                 this.uploadPercent = 100
                 uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                    this.avatarURL = downloadURL
-                    this.$emit('avatar-url', downloadURL)
+                    let url = downloadURL
+                    user.updateProfile({
+                        photoURL: url
+                    }).then(() => {
+                        console.log('Upload successful', user.photoURL)
+                        this.avatarURL = url
+                    }).catch((err) => {
+                        console.log('An error has occured: ' + err)
+                    })
                 })
             })
         }
@@ -133,6 +157,9 @@ export default {
         showColor() {
             if (typeof this.color === 'string') return this.color
         },
+        avatarURL() {
+            return user.photoURL
+        }
     }
 }
 </script>
@@ -145,12 +172,6 @@ export default {
         position: absolute;
         width: 100%;
         border-radius: 50%;
-    } 
-    .layout1 {
-        border: 1px solid blue
-    }
-    .layout2 {
-        border: 1px solid red
     }
     .avatar {
         border: 1px solid rgba(55, 59, 95, 0.3);
