@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import firebase from 'firebase'
+import store from './store/store'
 import NProgress from 'nprogress'
 
 import Dashboard from './views/Dashboard'
@@ -90,6 +91,7 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+    // const currentUser = store.state.user
     const currentUser = firebase.auth().currentUser
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 

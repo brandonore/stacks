@@ -34,7 +34,6 @@
                     <template v-if="$v.trim.batch.$error">
                         <span class="error--text" v-if="!$v.trim.batch.required">Value required</span>
                         <span class="error--text" v-if="!$v.trim.batch.minLength">4 digits required</span><br>
-                        <span class="error--text" v-if="!$v.trim.batch.numeric">Numbers only</span>
                     </template>
                     <v-text-field label="Weight (g)" v-model="$v.trim.weight.$model" clearable></v-text-field>
                     <template v-if="$v.trim.weight.$error">
@@ -63,9 +62,9 @@
                             <v-switch label="Failed?" v-model="trim.failed" color="primary"></v-switch>
                         </v-flex>
                         <v-flex xs12 sm8 class="text-right">
-                            <v-btn class="mr-2 mt-3" depressed color="error" @click="reset">Clear</v-btn>
-                            <v-btn class="mr-2 mt-3" outlined color="error" @click="dialog = false">Cancel</v-btn>
-                            <v-btn text class="mr-2 mt-3 success" @click="submit" :loading="loading">Add</v-btn>
+                            <v-btn class="mr-5 mt-3" depressed color="error" @click="reset($v.trim)">Clear</v-btn>
+                            <v-btn class="mr-5 mt-3" outlined color="error" @click="dialog = false">Cancel</v-btn>
+                            <v-btn text class="mr-5 mt-3 success" @click="submit($v.trim)" :loading="loading">Add</v-btn>
                         </v-flex>
                     </v-layout>
                 </v-form>
@@ -117,7 +116,6 @@ export default {
             batch: {
                 required,
                 minLength: minLength(4),
-                numeric
             },
             type: {
                 required
@@ -142,12 +140,13 @@ export default {
             this.trim.shop = shopname
             this.trim.license = license
         },
-        reset () {
+        reset ($v) {
             this.$refs.form.reset()
             this.loading = false
             this.trim.batch = []
+            $v.$reset()
         },
-        submit() {
+        submit($v) {
             this.$v.$touch()
             if(!this.$v.$invalid) {
                 this.loading = true
@@ -177,7 +176,8 @@ export default {
                         date: null
                     }
                 })
-                this.$root.$emit('set-snackbar', true)
+                $v.$reset()
+                this.$root.$emit('set-snackbar', 'addItem')
             } else {
                 return
             }

@@ -1,14 +1,14 @@
 <template>
     <div class="settings mx-3">
-        <h3 class="mb-4 secondary--text">Settings</h3>
+        <h3 class="mb-5 mt-3 secondary--text">Settings</h3>
         <v-divider class="mb-5"></v-divider>
         <!-- profile info -->
         <v-container fluid grid-list-xl>
             <v-layout wrap>
-                <v-flex d-flex xs12 sm6 md3 class="text-center white pa-5">
+                <v-flex d-flex width="100%" xs12 sm6 md3 class="text-center white pa-5">
                     <v-hover v-slot:default="{ hover }">
                         <v-avatar size="200" class="ml-5 avatar">
-                            <img v-if="!avatar" :src="avatarURL" alt="avatar" class="avatar-image">
+                            <img v-if="avatar" :src="avatarURL" alt="avatar" class="avatar-image">
                             <span v-else class="secondary--text headline">😛</span>
                             <v-fade-transition>
                                 <div
@@ -26,15 +26,14 @@
                         </v-avatar>
                     </v-hover>
                     <input v-show="false" ref="avatarUpload" @change="uploadFile" type="file" accept="image/*" >
-                    <v-flex d-flex class="text-center mt-5 ml-5">
+                    <!-- <v-flex d-flex class="text-center mt-5 ml-5">
                         <v-btn small outlined color="error" @click="removeAvatar">Remove</v-btn>
-                    </v-flex>
+                    </v-flex> -->
                 </v-flex>
                 <v-flex xs12 sm6 md9 class="layout2 white pl-5">
                     <div class="text-left secondary--text text-uppercase pt-3 title">Profile Settings</div>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea minus nulla ab sint sunt necessitatibus enim, ipsa debitis placeat aspernatur!
                 </v-flex>
-                <v-btn small outlined color="error" @click="logData">Log user data</v-btn>
             </v-layout>
             <!-- other settings -->
             <v-layout wrap class="mt-3">
@@ -71,10 +70,6 @@
 
 <script>
 import firebase from 'firebase'
-import { userInfo } from 'os';
-import { POINT_CONVERSION_COMPRESSED } from 'constants';
-
-let user = firebase.auth().currentUser
 
 export default {
     data() {
@@ -157,9 +152,9 @@ export default {
         showColor() {
             if (typeof this.color === 'string') return this.color
         },
-        avatarURL() {
-            return user.photoURL
-        }
+        // avatarURL() {
+        //     return user.photoURL
+        // }
     }
 }
 </script>

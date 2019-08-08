@@ -7,51 +7,60 @@
             width="300"
             v-if="user"
         >
-        <v-list dense>
-            <v-layout column align-center>
-                <v-flex class="mt-5 text-center">
-                    <v-avatar size="100">
-                        <img v-if="avatarURL" :src="avatarURL" alt="avatar" class="avatar-image">
-                        <span v-else>😛</span>
-                    </v-avatar>
-                    <div class="white--text my-0 mt-4 subtitle-1 font-weight-light">
-                        Logged in as:
-                    </div>
-                    <div class="white--text font-weight-bold title">
-                        {{ user.email }}
-                    </div>
-                </v-flex>
-            </v-layout>
-            <v-divider class="grey my-5"></v-divider>
-            <v-flex class="ml-2 mb-3">
-                <label class="white--text ml-2 body-2 text-uppercase">Menu</label>
-            </v-flex>
-            <v-list-item v-for="link in links" :key="link.text" :to="link.route" class="side-link">
-                <v-list-item-action>
-                    <v-icon small color="white">{{ link.icon }}</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title class="white--text">{{ link.text }}</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-            <v-divider class="grey my-5"></v-divider>
-                <v-flex class="ml-2 mb-3">
-                    <label class="white--text ml-2 body-2 text-uppercase">Control</label>
-                </v-flex>
-                <v-layout row wrap xs12 class="mt-5">
-                    <v-flex class="text-center">
-                        <AddShopData class="mr-5"/>
-                        <AddTrim />
+            <v-list dense>
+                <v-container fluid grid-list-xl>
+                    <v-layout column align-center>
+                        <v-flex class="mt-5 text-center">
+                            <v-avatar size="100">
+                                <img v-if="avatarURL" :src="avatarURL" alt="avatar" class="avatar-image">
+                                <span v-else class="white--text">No avatar</span>
+                            </v-avatar>
+                            <div class="white--text my-0 mt-4 subtitle-1 font-weight-light">
+                                Logged in as:
+                            </div>
+                            <div class="white--text font-weight-bold title">
+                                {{ user.email }}
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                    <v-divider class="grey my-5"></v-divider>
+                    <v-flex class="ml-2 mb-3">
+                        <label class="white--text ml-2 body-2 text-uppercase">Menu</label>
                     </v-flex>
-                </v-layout>
-                <v-layout row wrap xs12 class="mt-5">
-                    <v-flex class="text-center">
-                        <v-btn text color="white" class="px-3 mt-3" @click="signOut">
-                            <span>Sign Out</span>
-                            <v-icon right>far fa-sign-out-alt</v-icon>
-                        </v-btn>
-                    </v-flex>
-                </v-layout>
+                    <v-list-item v-for="link in links" :key="link.text" :to="link.route" class="side-link">
+                        <v-list-item-action>
+                            <v-icon small color="white">{{ link.icon }}</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title class="white--text">{{ link.text }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="grey my-5"></v-divider>
+                        <v-flex class="ml-2 mb-3">
+                            <label class="white--text ml-2 body-2 text-uppercase">Control</label>
+                        </v-flex>
+                        <v-layout row wrap xs12 class="mt-5">
+                            <v-flex class="text-center">
+                                <AddShopData />
+                            </v-flex>
+                        </v-layout>
+                        <v-layout justify-center class="mt-5">
+                            <v-flex d-flex xs12 sm6 lg5>
+                                <AddTrim />
+                            </v-flex>
+                            <v-flex d-flex xs12 sm6 lg5>
+                                <AddExtract />
+                            </v-flex>
+                        </v-layout>
+                        <v-layout row wrap xs12 class="mt-5">
+                            <v-flex class="text-center">
+                                <v-btn text color="white" class="px-3" @click="signOut">
+                                    <span>Sign Out</span>
+                                    <v-icon right>far fa-sign-out-alt</v-icon>
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
+                </v-container>
             </v-list>
         </v-navigation-drawer>
 
@@ -109,7 +118,7 @@
             bottom
             text
         >
-            Item added successfully
+        {{ snackbarText(snackbarVal) }}
             <v-btn
                 color="white"
                 text
@@ -123,14 +132,17 @@
 
 <script>
 import firebase from 'firebase'
-import AddTrim from './AddTrim'
 import AddShopData from './AddShopData'
+import AddTrim from './AddTrim'
+import AddExtract from './AddExtract'
+
 
 export default {
     name: 'navbar',
     components: { 
         AddShopData, 
-        AddTrim
+        AddTrim,
+        AddExtract
     },
     props: {
         source: String,
@@ -146,8 +158,9 @@ export default {
         ],
         user: null,
         drawer: null,
-        snackbar: true,
+        snackbar: false,
         timeout: 4000,
+        snackbarVal: '',
         navBgColor: '#373B5FFF',
         avatarURL: null
     }),
@@ -161,9 +174,13 @@ export default {
         setAvatar(url) {
             this.avatarURL = url
         },
-        setSnackbar() {
-            this.snackbar = true
-            console.log(this.snackbar)
+        snackbarText(val) {
+            switch(val) {
+                case 'addItem': return 'Item added successfully'
+                case 'editItem': return 'Edit successful'
+                default: return ''
+            }
+            this.snackbarVal = ''
         },
         signOut() {
             firebase.auth().signOut().then(() => {
@@ -186,7 +203,8 @@ export default {
     },
     mounted() {
         this.$root.$on('set-snackbar', (val) => {
-            this.snackbar = val
+            this.snackbarVal = val
+            this.snackbar = true
         })
     }
 }

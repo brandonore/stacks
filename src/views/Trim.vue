@@ -1,59 +1,65 @@
 <template>
     <div class="trim mx-3">
-        <h3 class="mb-4 secondary--text">Available Trim</h3>
+        <h3 class="mb-5 mt-3 secondary--text">Available Trim</h3>
         <v-divider class="mb-5"></v-divider>
-        <v-card flat>
-            <v-card-title>
-            <v-text-field
-                v-model="search"
-                append-icon="far fa-search"
-                label="Search"
-                single-line
-                hide-details
-            ></v-text-field>
-            </v-card-title>
-            <v-data-table
-            :headers="headers"
-            :items="trim"
-            :search="search"
-            >
-            <template v-slot:item.failed="{ item }">
-            <v-chip small :color="getColor(item.failed)" dark>{{ item.failed }}</v-chip>
-            </template>
-            <template v-slot:item.action="{ item }">
-            <v-tooltip left>
-                <template v-slot:activator="{ on }">
-                    <v-icon
-                        v-on="on"
-                        small
-                        class="mr-2"
-                        @click="editItem(item)"
-                    >
-                        fas fa-pencil
-                    </v-icon>
-                </template>
-                <span>Edit Item</span>
-                </v-tooltip>
-                <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                        <v-icon
-                            v-on="on"
-                            small
-                            @click="confirmModal(item.id)"
+        <v-container fluid grid-list-xl>
+            <v-layout wrap>
+                <v-flex d-flex width="100%">
+                    <v-card flat class="pa-5" width="100%">
+                        <v-card-title class="mb-5">
+                            <v-text-field
+                                v-model="search"
+                                append-icon="far fa-search"
+                                label="Search"
+                                single-line
+                                hide-details
+                            ></v-text-field>
+                        </v-card-title>
+                        <v-data-table
+                            :headers="headers"
+                            :items="trim"
+                            :search="search"
                         >
-                            fas fa-times
-                        </v-icon>
-                    </template>
-                    <span>Delete Item</span>
-                </v-tooltip>
-            </template>
-        </v-data-table>
-        </v-card>
+                            <template v-slot:item.failed="{ item }">
+                                <v-chip small :color="getColor(item.failed)" dark>{{ item.failed }}</v-chip>
+                            </template>
+                            <template v-slot:item.action="{ item }">
+                            <v-tooltip left>
+                                <template v-slot:activator="{ on }">
+                                    <v-icon
+                                        v-on="on"
+                                        small
+                                        class="mr-2"
+                                        @click="editItem(item)"
+                                    >
+                                        fas fa-pencil
+                                    </v-icon>
+                                </template>
+                                <span>Edit Item</span>
+                                </v-tooltip>
+                                <v-tooltip top>
+                                    <template v-slot:activator="{ on }">
+                                        <v-icon
+                                            v-on="on"
+                                            small
+                                            @click="confirmModal(item.id)"
+                                        >
+                                            fas fa-times
+                                        </v-icon>
+                                    </template>
+                                    <span>Delete Item</span>
+                                </v-tooltip>
+                            </template>
+                        </v-data-table>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+        </v-container>
         <!-- edit dialog -->
         <template>
             <v-layout justify-center>
             <v-dialog max-width="650" v-model="edit_dialog">
-                <v-card>
+                <v-card class="pa-5">
                 <v-card-title class="mb-5">
                     <h3 class="secondary--text">Add Trim/Incoming Package</h3>
                 </v-card-title>
@@ -114,7 +120,7 @@
         <template>
             <v-layout justify-center>
             <v-dialog v-model="delete_dialog" persistent max-width="350">
-                <v-card>
+                <v-card class="pa-2">
                 <v-card-title class="subtitle-1 font-weight-light">Are you sure you want to delete this item?</v-card-title>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -211,6 +217,7 @@ methods: {
         .then(() => {
             this.edit_dialog = false
         })
+        this.$root.$emit('set-snackbar', 'editItem')
     },
     confirmModal(id) {
         this.delete_dialog = true
@@ -227,7 +234,7 @@ methods: {
     },
     reset () {
         this.$refs.form.reset()
-    },
+    }
 },
 created() {
     db.collection('trim').onSnapshot((res) => {

@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard mx-3">
-        <h3 class="mb-4 secondary--text">Dashboard</h3>
+        <h3 class="mb-5 mt-3 secondary--text">Dashboard</h3>
         <v-divider class="mb-5"></v-divider>
         <v-container fluid grid-list-xl>
             <!-- home row -->
@@ -16,9 +16,10 @@
                                         <v-list-item-title class="secondary--text">Package count</v-list-item-title>
                                     </v-list-item-content>
                                 </template>
+                                <v-spacer></v-spacer>
                                 <template>
                                     <v-list-item-content class="text-right">
-                                        <h3 class="grey--text text--darken-1">{{ packageCount }}</h3>
+                                        <h3 class="grey--text text--darken-2 font-weight-regular">{{ packageCount }}</h3>
                                     </v-list-item-content>
                                 </template>
                             </v-list-item>
@@ -30,7 +31,7 @@
                                 </template>
                                 <template>
                                     <v-list-item-content class="text-right">
-                                        <h3 class="grey--text text--darken-1">{{ `${formatWeight(trimWeight)} (g)` }}</h3>
+                                        <h3 class="grey--text text--darken-2 font-weight-regular">{{ `${formatWeight(trimWeight)} (g)` }}</h3>
                                     </v-list-item-content>
                                 </template>
                             </v-list-item>
@@ -42,7 +43,7 @@
                                 </template>
                                 <template>
                                     <v-list-item-content class="text-right">
-                                        <h3 class="grey--text text--darken-1">8</h3>
+                                        <h3 class="grey--text text--darken-2 font-weight-regular">0</h3>
                                     </v-list-item-content>
                                 </template>
                             </v-list-item>
@@ -54,7 +55,7 @@
                                 </template>
                                 <template>
                                     <v-list-item-content class="text-right">
-                                        <h3 class="grey--text text--darken-1">12</h3>
+                                        <h3 class="grey--text text--darken-2 font-weight-regular">0</h3>
                                     </v-list-item-content>
                                 </template>
                             </v-list-item>
@@ -66,7 +67,7 @@
                                 </template>
                                 <template>
                                     <v-list-item-content class="text-right">
-                                        <h3 class="grey--text text--darken-1">3900 (g)</h3>
+                                        <h3 class="grey--text text--darken-2 font-weight-regular">{{ `${formatWeight(extractWaste)} (g)` }}</h3>
                                     </v-list-item-content>
                                 </template>
                             </v-list-item>
@@ -119,6 +120,7 @@ export default {
     data() {
         return {
             trim: [],
+            extract: [],
             planetChartData,
             barChartData,
             doughnutChartData,
@@ -142,17 +144,33 @@ export default {
                     })
                 }
             })
+        }),
+        db.collection('extract').onSnapshot((res) => {
+            const changes = res.docChanges()
+            changes.forEach((change) => {
+                if(change.type === 'added') {
+                    this.extract.push({
+                        ...change.doc.data(),
+                        id: change.doc.id
+                    })
+                }
+            })
         })
     },
     computed: {
         packageCount() {
             return this.trim.reduce((total, item) => {
-                return total + item.batch.split(',').length;
+                return total + item.batch.split(',').length
             }, 0)
         },
         trimWeight() {
             return this.trim.reduce((total, item) => {
-                return total + item.weight;
+                return total + item.weight
+            }, 0)
+        },
+        extractWaste() {
+            return this.extract.reduce((total, item) => {
+                return total + item.waste
             }, 0)
         }
     }

@@ -1,6 +1,6 @@
 <template>
     <div class="calendar mx-3">
-        <h3 class="mb-4 secondary--text">Calendar</h3>
+        <h3 class="mb-5 mt-3 secondary--text">Calendar</h3>
         <v-divider class="mb-5"></v-divider>
             <v-layout>
             <v-flex>
