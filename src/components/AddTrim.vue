@@ -1,7 +1,7 @@
 <template>    
     <v-dialog max-width="650" v-model="dialog">
         <template v-slot:activator="{ on }">
-            <v-btn v-on="on" text color="white" class="success">Trim <v-icon right>fal fa-plus</v-icon></v-btn>
+            <v-btn v-on="on" width="225" text class="secondary--text pa-3 white" depressed>Trim <v-icon right>fal fa-plus</v-icon></v-btn>
         </template>
         <v-card class="pa-5">
             <v-card-title class="mb-5">
@@ -159,7 +159,7 @@ export default {
                     weight: Number(this.trim.weight),
                     failed: this.trim.failed,
                     type: this.trim.type,
-                    date: format(this.trim.date, 'MMM Do YYYY')
+                    date: format(this.trim.date, 'MM/DD/YYYY')
                 }
                 db.collection('trim').add(trim).then(() => {
                     this.loading = false
@@ -185,7 +185,7 @@ export default {
     },
     computed: {
         formattedDate() {
-            return this.trim.date ? format(this.trim.date, 'MMM Do YYYY') : ''
+            return this.trim.date ? format(this.trim.date, 'MM/DD/YYYY') : ''
         }
     },
     created() {

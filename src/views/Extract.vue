@@ -64,7 +64,7 @@
                                             v-on="on"
                                             small
                                             class="mr-2"
-                                            @click="moveExtractItem(item)"
+                                            @click="moveItem(item)"
                                         >
                                             fas fa-arrow-to-right
                                         </v-icon>
@@ -95,6 +95,22 @@
             </v-dialog>
             </v-layout>
         </template>
+        <!-- add to packaging dialog -->
+        <template>
+            <v-layout justify-center>
+            <v-dialog v-model="packaging_dialog" persistent max-width="350">
+                <v-card class="pa-2">
+                <v-card-title class="subtitle-1 font-weight-light">Are you sure you want to move this item?</v-card-title>
+                {{ packageItem }}
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="error" text @click="packaging_dialog = false">Cancel</v-btn>
+                    <v-btn color="success" text @click="confirmMove">Yes</v-btn>
+                </v-card-actions>
+                </v-card>
+            </v-dialog>
+            </v-layout>
+        </template>
     </div>
 </template>
 
@@ -110,9 +126,11 @@ export default {
             extract: [],
             singleExpand: true,
             editExtract: {},
+            packageItem: {},
             search: '',
             edit_dialog: false,
             delete_dialog: false,
+            packaging_dialog: false,
             id: null,
             headers: [
                 { text: 'Shop Name', align: 'left', value: 'shop' },
@@ -134,8 +152,17 @@ export default {
         }
     },
     methods: {
-        moveExtractItem(item) {
-
+        moveItem(item) {
+            this.packageItem = Object.assign({}, item)
+            let date = new Date()
+            this.packageItem['rackDate'] = format(date, 'MM/DD/YYYY')
+            this.packaging_dialog = true
+        },
+        confirmMove() {
+            db.collection('packaging').add(this.packageItem).then(() => {
+                this.packageItem = {}
+                this.packaging_dialog = false
+            })
         },
         editItem(item) {
             this.editExtract = Object.assign({}, item)

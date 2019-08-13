@@ -6,7 +6,6 @@
                 <v-form
                     ref="form"
                     v-model="valid"
-                    :lazy-validation="lazy"
                     class="text-center"
                 >
                     <v-text-field
@@ -19,6 +18,7 @@
                         label="password"
                         required
                         type="password"
+                        @keydown.enter="signUp"
                     ></v-text-field>
                     <v-flex xs12 class="my-5">
                             <v-btn

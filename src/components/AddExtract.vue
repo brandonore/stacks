@@ -1,7 +1,7 @@
 <template>    
     <v-dialog max-width="650" v-model="dialog">
         <template v-slot:activator="{ on }">
-            <v-btn v-on="on" text color="white" class="error">Run <v-icon right>fal fa-plus</v-icon></v-btn>
+            <v-btn v-on="on" width="225" text class="secondary--text pa-3 white" depressed>Run <v-icon right>fal fa-plus</v-icon></v-btn>
         </template>
         <v-card class="pa-5">
             <v-card-title class="mb-5">
@@ -206,8 +206,8 @@ export default {
                 const extract = {
                     shop: this.extract.shop,
                     license: this.extract.license,
-                    manifestDate: format(this.extract.manifestDate, 'MMM Do YYYY'),
-                    processDate: format(this.extract.processDate, 'MMM Do YYYY'),
+                    manifestDate: format(this.extract.manifestDate, 'MM/DD/YYYY'),
+                    processDate: format(this.extract.processDate, 'MM/DD/YYYY'),
                     initials: this.extract.initials,
                     strain: this.extract.strain,
                     batch: this.extract.batch,
@@ -252,10 +252,10 @@ export default {
     },
     computed: {
         formattedManifestDate() {
-            return this.extract.manifestDate ? format(this.extract.manifestDate, 'MMM Do YYYY') : ''
+            return this.extract.manifestDate ? format(this.extract.manifestDate, 'MM/DD/YYYY') : ''
         },
         formattedProcessDate() {
-            return this.extract.processDate ? format(this.extract.processDate, 'MMM Do YYYY') : ''
+            return this.extract.processDate ? format(this.extract.processDate, 'MM/DD/YYYY') : ''
         }
     },
     created() {

@@ -39,9 +39,12 @@
                         <v-flex class="ml-2 mb-3">
                             <label class="white--text ml-2 body-2 text-uppercase">Control</label>
                         </v-flex>
-                        <v-layout row wrap xs12 class="mt-5">
-                            <v-flex class="text-center">
+                        <v-layout justify-center class="mt-5">
+                            <v-flex d-flex xs12 sm6 lg5>
                                 <AddShopData />
+                            </v-flex>
+                            <v-flex d-flex xs12 sm6 lg5>
+                                <AddTrim />
                             </v-flex>
                         </v-layout>
                         <v-layout justify-center class="mt-5">
