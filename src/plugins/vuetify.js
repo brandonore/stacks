@@ -17,7 +17,8 @@ export default new Vuetify({
             alternate: '#5969FF',
             info: '#ffaa2c',
             error: '#f83e70',
-            champagne: '#fad6a5'
+            champagne: '#fad6a5',
+            accent: '#5969FF'
         }
         }
     }

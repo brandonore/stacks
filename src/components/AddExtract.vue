@@ -85,13 +85,13 @@
                     </template>
                     <v-layout justify-space-between wrap>
                         <v-flex xs12 sm4 md3>
-                            <v-switch label="Failed?" v-model="extract.failed" color="primary"></v-switch>
+                            <v-switch label="Failed?" v-model="extract.failed" color="primary" inset></v-switch>
                         </v-flex>
                         <v-flex xs12 sm4 md3>
-                            <v-switch label="Champagne?" v-model="extract.champagne" color="primary"></v-switch>
+                            <v-switch label="Champagne?" v-model="extract.champagne" color="primary" inset></v-switch>
                         </v-flex>
                         <v-flex xs12 sm4 md3>
-                            <v-switch label="Rerun?" v-model="extract.rerun" color="primary"></v-switch>
+                            <v-switch label="Rerun?" v-model="extract.rerun" color="primary" inset></v-switch>
                         </v-flex>
                     </v-layout>
                     <v-textarea outlined label="Notes" v-model="extract.notes" clearable></v-textarea>

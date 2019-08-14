@@ -59,7 +59,7 @@
                     </v-layout>
                     <v-layout row wrap>
                         <v-flex xs12 sm4>
-                            <v-switch label="Failed?" v-model="trim.failed" color="primary"></v-switch>
+                            <v-switch label="Failed?" v-model="trim.failed" color="primary" inset></v-switch>
                         </v-flex>
                         <v-flex xs12 sm8 class="text-right">
                             <v-btn class="mr-5 mt-3" depressed color="error" @click="reset($v.trim)">Clear</v-btn>

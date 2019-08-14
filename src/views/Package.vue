@@ -20,8 +20,11 @@
                             :items="packageItem"
                             :search="search"
                         >
-                            <template v-slot:item.failed="{ item }">
-                                <v-chip small :color="getColor(item.failed)" dark>{{ item.failed }}</v-chip>
+                            <template v-slot:item.champagne="{ item }">
+                                <v-chip small :color="getChampagne(item.champagne)" dark>{{ item.champagne }}</v-chip>
+                            </template>
+                            <template v-slot:item.labeled>
+                                <v-checkbox v-model="labeled" @change="moveToDelivery"></v-checkbox>
                             </template>
                             <template v-slot:item.action="{ item }">
                             <v-tooltip left>
@@ -55,6 +58,74 @@
                 </v-flex>
             </v-layout>
         </v-container>
+        <!-- middle row -->
+        <v-container fluid grid-list-xl>
+            <v-layout wrap>
+                <v-flex justify-center d-flex width="100%">
+                    <v-icon class="arrow" color="grey lighten-1">fas fa-long-arrow-alt-down</v-icon>
+                </v-flex>
+            </v-layout>
+        </v-container>
+        <!-- delivery table -->
+        <v-container fluid grid-list-xl>
+            <v-layout wrap>
+                <v-flex d-flex width="100%">
+                        <v-card class="mx-auto" width="100%" flat>
+                            <v-toolbar
+                            color="cyan"
+                            dark
+                            flat
+                            >
+                            <v-toolbar-title>Delivery Status</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-btn icon>
+                                <v-icon>fal fa-check-circle</v-icon>
+                            </v-btn>
+                            </v-toolbar>
+                            <v-list two-line>
+                            <v-list-item-group
+                                v-model="selected"
+                                multiple
+                                :active-class="{ strike: isStrike }"
+                                color="success"
+                            >
+                                <template v-for="(item, index) in items">
+                                    <v-list-item :key="item.title">
+                                        <template v-slot:default="{ active, toggle }">
+                                        <v-list-item-content>
+                                            <v-list-item-title v-text="item.title"></v-list-item-title>
+                                            <v-list-item-subtitle class="text--primary" v-text="item.headline"></v-list-item-subtitle>
+                                            <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
+                                        </v-list-item-content>
+                                        <v-list-item-action>
+                                            <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
+                                            <v-icon
+                                            v-if="!active"
+                                            color="grey lighten-1"
+                                            >
+                                            fal fa-check-circle
+                                            </v-icon>
+                                            <v-icon
+                                            v-else
+                                            color="success"
+                                            >
+                                            fas fa-check-circle
+                                            </v-icon>
+                                        </v-list-item-action>
+                                        </template>
+                                    </v-list-item>
+                                    <v-divider
+                                        v-if="index + 1 < items.length"
+                                        :key="index"
+                                    ></v-divider>
+                                </template>
+                            </v-list-item-group>
+                            </v-list>
+                        </v-card>
+                    
+                </v-flex>
+            </v-layout>
+        </v-container>
         <!-- delete dialog -->
         <template>
             <v-layout justify-center>
@@ -82,7 +153,32 @@ export default {
 name: 'package',
 data() {
     return {
+        labeled: false,
+        selected: [],
         packageItem: [],
+        items: [
+            {
+            // action: '15 min',
+            title: 'Allgreens',
+            subtitle: "Kong | Shatter | 120g | 2249",
+            },
+            {
+            // action: '15 min',
+            title: 'Allgreens',
+            subtitle: "Kong | Shatter | 120g | 2249",
+            },
+            {
+            // action: '15 min',
+            title: 'Allgreens',
+            subtitle: "Kong | Shatter | 120g | 2249",
+            },
+            {
+            // action: '15 min',
+            title: 'Allgreens',
+            subtitle: "Kong | Shatter | 120g | 2249",
+            },
+            
+        ],
         shopdata: [],
         editPackage: {
             shop: '',
@@ -99,7 +195,7 @@ data() {
             sample: '',
             testType: '',
             packInitials: '',
-            yield: null
+            yield: null,
         },
         search: '',
         edit_dialog: false,
@@ -122,6 +218,7 @@ data() {
             { text: 'Test Type', value: 'testType' },
             { text: 'Packager Initials', value: 'packInitials' },
             { text: 'Yield', value: 'yield'},
+            { text: 'Labeled', value: 'labeled' },
             { text: 'Actions', value: 'action' }
         ]
     }
@@ -158,6 +255,11 @@ validations: {
         }
     },
     methods: {
+        moveToDelivery() {
+            if(this.labeled && this.packageDate) {
+                // move to label
+            }
+        },
         calcYield(grams, weight) {
             return grams / weight
         },
@@ -169,6 +271,10 @@ validations: {
             db.collection('packaging').doc(this.id).delete()
             this.id = null
             this.delete_dialog = false
+        },
+        getChampagne(item) {
+            if(item === true) return 'champagne'
+            else return 'secondary'
         },
     },
     created() {
@@ -198,3 +304,11 @@ validations: {
 }
 </script>
 
+<style scoped>
+    .strike {
+        text-decoration: line-through;
+    }
+    .arrow {
+        font-size: 2.5rem;
+    }
+</style>
