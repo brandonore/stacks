@@ -1,7 +1,7 @@
 <template>    
     <v-dialog max-width="650" v-model="dialog">
         <template v-slot:activator="{ on }">
-            <v-btn v-on="on" width="225" text class="secondary--text pa-3 white" depressed>Run <v-icon right>fal fa-plus</v-icon></v-btn>
+            <v-btn v-on="on" width="225" text class="white--text pa-3 alternate" depressed>Run <v-icon right>fal fa-plus</v-icon></v-btn>
         </template>
         <v-card class="pa-5">
             <v-card-title class="mb-5">

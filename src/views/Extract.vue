@@ -58,7 +58,7 @@
                                     </template>
                                     <span>Delete Item</span>
                                 </v-tooltip>
-                                <v-tooltip bottom>
+                                <v-tooltip left>
                                     <template v-slot:activator="{ on }">
                                         <v-icon
                                             v-on="on"
@@ -156,11 +156,15 @@ export default {
             this.packageItem = Object.assign({}, item)
             let date = new Date()
             this.packageItem['rackDate'] = format(date, 'MM/DD/YYYY')
+            this.packageItem['totalGrams'] = 0
+            this.packageItem['sample'] = '2'
+            this.packageItem['testType'] = 'P'
+            this.packageItem['packInitials'] = ''
+            this.packageItem['labeled'] = false
             this.packaging_dialog = true
         },
         confirmMove() {
             db.collection('packaging').add(this.packageItem).then(() => {
-                this.packageItem = {}
                 this.packaging_dialog = false
             })
         },

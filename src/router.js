@@ -7,7 +7,7 @@ import NProgress from 'nprogress'
 import Dashboard from './views/Dashboard'
 import Trim from './views/Trim'
 import Extract from './views/Extract'
-import Package from './views/Package'
+import Packaging from './views/Packaging'
 import Settings from './views/Settings'
 import Calendar from './views/Calendar'
 import Login from './views/Login'
@@ -46,9 +46,9 @@ const router = new Router({
             }
         },
         {
-            path: "/package",
-            name: "package",
-            component: Package,
+            path: "/packaging",
+            name: "packaging",
+            component: Packaging,
             meta: {
                 requiresAuth: true
             }

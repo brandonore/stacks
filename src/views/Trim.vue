@@ -61,7 +61,7 @@
             <v-dialog max-width="650" v-model="edit_dialog">
                 <v-card class="pa-5">
                 <v-card-title class="mb-5">
-                    <h3 class="secondary--text">Add Trim/Incoming Package</h3>
+                    <h3 class="secondary--text">Edit Trim/Incoming Package</h3>
                 </v-card-title>
                 <v-card-text>
                     <v-form class="px-3" ref="form">

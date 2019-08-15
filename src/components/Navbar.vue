@@ -49,10 +49,10 @@
                         </v-layout>
                         <v-layout justify-center class="mt-5">
                             <v-flex d-flex xs12 sm6 lg5>
-                                <AddTrim />
+                                <AddExtract />
                             </v-flex>
                             <v-flex d-flex xs12 sm6 lg5>
-                                <AddExtract />
+                                
                             </v-flex>
                         </v-layout>
                         <v-layout row wrap xs12 class="mt-5">
@@ -155,7 +155,7 @@ export default {
             { icon: 'fas fa-home', text: 'Dashboard', route: '/' },
             { icon: 'fas fa-sack', text: 'Trim', route: '/trim' },
             { icon: 'fas fa-burn', text: 'Extraction', route: '/extract' },
-            { icon: 'fas fa-box', text: 'Packaging', route: '/package' },
+            { icon: 'fas fa-box', text: 'Packaging', route: '/packaging' },
             { icon: 'fas fa-calendar-day', text: 'Calendar', route: '/calendar' },
             { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'}
         ],

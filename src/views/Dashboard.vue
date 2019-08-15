@@ -43,7 +43,7 @@
                                 </template>
                                 <template>
                                     <v-list-item-content class="text-right">
-                                        <h3 class="grey--text text--darken-2 font-weight-regular">0</h3>
+                                        <h3 class="grey--text text--darken-2 font-weight-regular">{{ slabsOnRack }}</h3>
                                     </v-list-item-content>
                                 </template>
                             </v-list-item>
@@ -51,6 +51,18 @@
                                 <template>
                                     <v-list-item-content>
                                         <v-list-item-title class="secondary--text">Slabs ready for label</v-list-item-title>
+                                    </v-list-item-content>
+                                </template>
+                                <template>
+                                    <v-list-item-content class="text-right">
+                                        <h3 class="grey--text text--darken-2 font-weight-regular">0</h3>
+                                    </v-list-item-content>
+                                </template>
+                            </v-list-item>
+                            <v-list-item>
+                                <template>
+                                    <v-list-item-content>
+                                        <v-list-item-title class="secondary--text">Total grams packaged</v-list-item-title>
                                     </v-list-item-content>
                                 </template>
                                 <template>
@@ -121,6 +133,7 @@ export default {
         return {
             trim: [],
             extract: [],
+            packaging: [],
             planetChartData,
             barChartData,
             doughnutChartData,
@@ -155,6 +168,17 @@ export default {
                     })
                 }
             })
+        }),
+        db.collection('packaging').onSnapshot((res) => {
+            const changes = res.docChanges()
+            changes.forEach((change) => {
+                if(change.type === 'added') {
+                    this.packaging.push({
+                        ...change.doc.data(),
+                        id: change.doc.id
+                    })
+                }
+            })
         })
     },
     computed: {
@@ -167,6 +191,9 @@ export default {
             return this.trim.reduce((total, item) => {
                 return total + item.weight
             }, 0)
+        },
+        slabsOnRack() {
+            return this.packaging.length
         },
         extractWaste() {
             return this.extract.reduce((total, item) => {
