@@ -5,7 +5,11 @@
         <v-container fluid grid-list-xl>
             <v-layout wrap>
                 <v-flex d-flex width="100%">
-                    <v-card flat class="pa-5" width="100%">
+                    <v-card flat class="mx-auto" width="100%">
+                        <v-toolbar color="secondary lighten-1" dark flat>
+                            <v-toolbar-title>Current Trim on Hand</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                        </v-toolbar>
                         <v-card-title class="mb-5">
                             <v-text-field
                                 v-model="search"

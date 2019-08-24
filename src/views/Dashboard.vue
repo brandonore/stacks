@@ -13,7 +13,7 @@
                             <v-list-item>
                                 <template>
                                     <v-list-item-content>
-                                        <v-list-item-title class="secondary--text">Package count</v-list-item-title>
+                                        <v-list-item-title class="secondary--text">Batch count</v-list-item-title>
                                     </v-list-item-content>
                                 </template>
                                 <v-spacer></v-spacer>
@@ -50,7 +50,7 @@
                             <v-list-item>
                                 <template>
                                     <v-list-item-content>
-                                        <v-list-item-title class="secondary--text">Slabs ready for label</v-list-item-title>
+                                        <v-list-item-title class="secondary--text">Slabs ready for delivery</v-list-item-title>
                                     </v-list-item-content>
                                 </template>
                                 <template>
@@ -67,7 +67,7 @@
                                 </template>
                                 <template>
                                     <v-list-item-content class="text-right">
-                                        <h3 class="grey--text text--darken-2 font-weight-regular">0</h3>
+                                        <h3 class="grey--text text--darken-2 font-weight-regular">{{ totalGrams }}</h3>
                                     </v-list-item-content>
                                 </template>
                             </v-list-item>
@@ -198,6 +198,11 @@ export default {
         extractWaste() {
             return this.extract.reduce((total, item) => {
                 return total + item.waste
+            }, 0)
+        },
+        totalGrams() {
+            return this.packaging.reduce((total, item) => {
+                return total + item.totalGrams
             }, 0)
         }
     }

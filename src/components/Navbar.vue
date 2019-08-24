@@ -35,34 +35,43 @@
                             <v-list-item-title class="white--text">{{ link.text }}</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+                    <!-- control items -->
                     <v-divider class="grey my-5"></v-divider>
                         <v-flex class="ml-2 mb-3">
                             <label class="white--text ml-2 body-2 text-uppercase">Control</label>
                         </v-flex>
-                        <v-layout justify-center class="mt-5">
-                            <v-flex d-flex xs12 sm6 lg5>
-                                <AddShopData />
-                            </v-flex>
-                            <v-flex d-flex xs12 sm6 lg5>
-                                <AddTrim />
-                            </v-flex>
-                        </v-layout>
-                        <v-layout justify-center class="mt-5">
-                            <v-flex d-flex xs12 sm6 lg5>
-                                <AddExtract />
-                            </v-flex>
-                            <v-flex d-flex xs12 sm6 lg5>
-                                
-                            </v-flex>
-                        </v-layout>
-                        <v-layout row wrap xs12 class="mt-5">
-                            <v-flex class="text-center">
-                                <v-btn text color="white" class="px-3" @click="signOut">
-                                    <span>Sign Out</span>
-                                    <v-icon right>far fa-sign-out-alt</v-icon>
-                                </v-btn>
-                            </v-flex>
-                        </v-layout>
+                        <v-list-item class="side-link comp-link">
+                            <v-list-item-action>
+                                <v-icon small color="white">fas fa-store-alt</v-icon>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title><AddShopData /></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item class="side-link comp-link">
+                            <v-list-item-action>
+                                <v-icon small color="white">fas fa-arrow-alt-right</v-icon>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title><AddTrim /></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item class="side-link comp-link">
+                            <v-list-item-action>
+                                <v-icon small color="white">fas fa-tags</v-icon>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title><AddExtract /></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item class="side-link comp-link">
+                            <v-list-item-action>
+                                <v-icon small color="white">fas fa-circle-notch</v-icon>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title><AddExtract /></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
                 </v-container>
             </v-list>
         </v-navigation-drawer>
@@ -159,6 +168,11 @@ export default {
             { icon: 'fas fa-calendar-day', text: 'Calendar', route: '/calendar' },
             { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'}
         ],
+        componentLinks: [
+            { icon: 'fas fa-plus', text: 'Add Shop', component: AddShopData },
+            { icon: 'fas fa-plus', text: 'Add Trim', component: AddTrim },
+            { icon: 'fas fa-plus', text: 'Add Extract', component: AddExtract }
+        ],
         user: null,
         drawer: null,
         snackbar: false,
@@ -216,5 +230,8 @@ export default {
 <style scoped>
     .side-link:hover {
         background: #3cd1c2;
+    }
+    .comp-link {
+        max-height: 40px;
     }
 </style>

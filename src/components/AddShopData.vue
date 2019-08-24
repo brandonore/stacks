@@ -1,7 +1,7 @@
 <template>
     <v-dialog max-width="600px" v-model="dialog">
         <template v-slot:activator="{ on }">
-            <v-btn class="secondary--text pa-3" v-on="on" width="180" depressed>Shop <v-icon right>fal fa-plus</v-icon></v-btn>
+            <v-btn v-on="on" text class="white--text text-capitalize comp-btn">Add Shop</v-btn>
         </template>
         <v-card class="pa-5">
             <v-card-title class="mb-5">
@@ -73,3 +73,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .comp-btn {
+        letter-spacing: normal !important;
+    }
+    .comp-btn.v-btn:not(.v-btn--round).v-size--default {
+        padding: 0 65% 0 0;
+    }
+</style>

@@ -5,7 +5,14 @@
         <v-container fluid grid-list-xl>
             <v-layout wrap>
                 <v-flex d-flex width="100%">
-                    <v-card flat class="pa-5" width="100%">
+                    <v-card flat class="mx-auto" width="100%">
+                        <v-toolbar color="pink" dark flat>
+                            <v-toolbar-title>Current Slabs</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-btn icon>
+                                <v-icon>fal fa-times</v-icon>
+                            </v-btn>
+                        </v-toolbar>
                         <v-card-title class="mb-5">
                             <v-text-field
                                 v-model="search"
@@ -13,12 +20,14 @@
                                 label="Search"
                                 single-line
                                 hide-details
+                                class="pa-5"
                             ></v-text-field>
                         </v-card-title>
                         <v-data-table
                             :headers="headers"
                             :items="packageSlab"
                             :search="search"
+                            class="pa-5"
                         >
                             <template v-slot:item.champagne="{ item }">
                                 <v-chip small :color="getChampagne(item.champagne)" dark>{{ item.champagne }}</v-chip>
@@ -42,6 +51,7 @@
                                         <v-icon
                                             v-on="on"
                                             small
+                                            class="mr-2"
                                             @click="confirmModal(item.id)"
                                         >
                                             fas fa-times
@@ -54,12 +64,13 @@
                                         <v-icon
                                             v-on="on"
                                             small
-                                            @click="labelModal(item.id)"
+                                            class="mr-2"
+                                            @click="labelModal(item)"
                                         >
                                             fas fa-tag
                                         </v-icon>
                                     </template>
-                                    <span>Labeled?</span>
+                                    <span>Mark as Labeled</span>
                                 </v-tooltip>
                             </template>
                         </v-data-table>
@@ -67,6 +78,7 @@
                 </v-flex>
             </v-layout>
         </v-container>
+
         <!-- middle row -->
         <v-container fluid grid-list-xl>
             <v-layout wrap>
@@ -75,23 +87,33 @@
                 </v-flex>
             </v-layout>
         </v-container>
+
         <!-- delivery table -->
         <v-container fluid grid-list-xl>
             <v-layout wrap>
                 <v-flex d-flex width="100%">
                         <v-card class="mx-auto" width="100%" flat>
                             <v-toolbar color="cyan darken-1" dark flat>
-                            <v-toolbar-title>Delivery Status</v-toolbar-title>
-                            <v-spacer></v-spacer>
-                            <v-btn icon>
-                                <v-icon>fal fa-times</v-icon>
-                            </v-btn>
+                                <v-toolbar-title>Delivery Status</v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                <v-btn icon>
+                                    <v-icon>fal fa-times</v-icon>
+                                </v-btn>
                             </v-toolbar>
+                            <v-text-field
+                                v-model="deliverySearch"
+                                append-icon="far fa-search"
+                                label="Search"
+                                single-line
+                                hide-details
+                                class="pa-5"
+                            ></v-text-field>
                             <v-data-table
                                 :headers="deliveryHeaders"
                                 :items="deliveryItems"
-                                :items-per-page="5"
-                                class="mt-5"
+                                :items-per-page="10"
+                                :search="deliverySearch"
+                                class="mt-5 delivery-table"
                             >
                             <template v-slot:item.action="{ item }">
                             <v-tooltip left>
@@ -112,7 +134,7 @@
                                         <v-icon
                                             v-on="on"
                                             small
-                                            @click="deleteDeliveryModal(item.id)"
+                                            @click="confirmDeliveryModal(item.id)"
                                         >
                                             fas fa-times
                                         </v-icon>
@@ -121,47 +143,7 @@
                                 </v-tooltip>
                             </template>
                             </v-data-table>
-                            
-                            <!-- <v-list two-line>
-                            <v-list-item-group
-                                v-model="selected"
-                                multiple
-                                color="success"
-                            >
-                                <template v-for="(item, index) in items">
-                                    <v-list-item :key="item.title">
-                                        <template v-slot:default="{ active, toggle }">
-                                        <v-list-item-content>
-                                            <v-list-item-title v-text="item.title"></v-list-item-title>
-                                            <v-list-item-subtitle class="text--primary" v-text="item.headline"></v-list-item-subtitle>
-                                            <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
-                                        </v-list-item-content>
-                                        <v-list-item-action>
-                                            <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
-                                                <v-icon
-                                                    v-if="!active"
-                                                    color="grey lighten-1"
-                                                >
-                                                    fal fa-check-circle
-                                                </v-icon>
-                                                <v-icon
-                                                    v-else
-                                                    color="success"
-                                                >
-                                                    fas fa-check-circle
-                                                </v-icon>
-                                        </v-list-item-action>
-                                        </template>
-                                    </v-list-item>
-                                    <v-divider
-                                        v-if="index + 1 < items.length"
-                                        :key="index"
-                                    ></v-divider>
-                                </template>
-                            </v-list-item-group>
-                            </v-list> -->
                         </v-card>
-                    
                 </v-flex>
             </v-layout>
         </v-container>
@@ -224,6 +206,21 @@
             </v-dialog>
             </v-layout>
         </template>
+        <!-- delete delivery dialog -->
+        <template>
+            <v-layout justify-center>
+            <v-dialog v-model="delete_delivery_dialog" persistent max-width="350">
+                <v-card class="pa-2">
+                <v-card-title class="subtitle-1 font-weight-light">Are you sure you want to delete this item?</v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="error" text @click="delete_delivery_dialog = false">Cancel</v-btn>
+                    <v-btn color="success" text @click="deleteDeliveryItem">Yes</v-btn>
+                </v-card-actions>
+                </v-card>
+            </v-dialog>
+            </v-layout>
+        </template>
         <!-- label dialog -->
         <template>
             <v-layout justify-center>
@@ -239,7 +236,7 @@
             </v-dialog>
             </v-layout>
         </template>
-        {{ packageSlab }}
+        <!-- {{ packageSlab }} -->
     </div>
 </template>
 
@@ -256,37 +253,8 @@ data() {
     return {
         selected: [],
         packageSlab: [],
-        deliveryItems: [
-            { shop: 'Allgreens', strain: 'Kong', productType: 'Shatter', totalGrams: 128 },
-            { shop: 'Allgreens', strain: 'Agent Orange', productType: 'Shatter', totalGrams: 86 },
-            { shop: 'Herbal Healing', strain: 'Think Fast', productType: 'Shatter', totalGrams: 436 },
-            { shop: 'Dankery', strain: 'Blue Drea', productType: 'Live', totalGrams: 225 },
-            { shop: 'American Wholesale', strain: 'London Pound Cake', productType: 'Budder', totalGrams: 187 },
-            {  }
-        ],
-        // items: [
-        //     {
-        //     // action: '15 min',
-        //     title: 'Allgreens',
-        //     subtitle: "Kong | Shatter | 120g | 2249",
-        //     },
-        //     {
-        //     // action: '15 min',
-        //     title: 'Allgreens',
-        //     subtitle: "Kong | Shatter | 120g | 2249",
-        //     },
-        //     {
-        //     // action: '15 min',
-        //     title: 'Allgreens',
-        //     subtitle: "Kong | Shatter | 120g | 2249",
-        //     },
-        //     {
-        //     // action: '15 min',
-        //     title: 'Allgreens',
-        //     subtitle: "Kong | Shatter | 120g | 2249",
-        //     },
-            
-        // ],
+        deliveryItems: [],
+        deliveryItem: {},
         shopdata: [],
         editPackage: {
             shop: '',
@@ -306,8 +274,10 @@ data() {
             yield: null,
         },
         search: '',
+        deliverySearch: '',
         edit_dialog: false,
         delete_dialog: false,
+        delete_delivery_dialog: false,
         label_dialog: false,
         id: null,
         loading: null,
@@ -334,6 +304,7 @@ data() {
             { text: 'Strain Name', value: 'strain' },
             { text: 'Shatter/Budder/Live/Sugar', value: 'productType' },
             { text: 'Total Grams', value: 'totalGrams' },
+            { text: 'Ready to Deliver', value: 'readyToDeliver' },
             { text: 'Actions', value: 'action' }
         ]
     }
@@ -370,8 +341,18 @@ data() {
 //         }
 //     },
     methods: {
+        labelModal(item) {
+            this.deliveryItem = Object.assign({}, item)
+            this.label_dialog = true
+        },
         moveToDelivery() {
-            // move slab to delivery table
+            db.collection('delivery').add(this.deliveryItem).then(() => {
+                this.label_dialog = false
+            })
+        },
+        markDelivered(item) {
+            let tr = document.querySelector('.delivery-table').rows
+            console.log(tr)
         },
         calcYield(grams, weight) {
             return grams / weight
@@ -380,14 +361,19 @@ data() {
             this.delete_dialog = true
             this.id = id
         },
-        labelModal(id) {
-            this.label_dialog = true
+        confirmDeliveryModal(id) {
+            this.delete_delivery_dialog = true
             this.id = id
         },
         deleteItem() {
             db.collection('packaging').doc(this.id).delete()
             this.id = null
             this.delete_dialog = false
+        },
+        deleteDeliveryItem() {
+            db.collection('delivery').doc(this.id).delete()
+            this.id = null
+            this.delete_delivery_dialog = false
         },
         editItem(item) {
             this.editPackage = Object.assign({}, item)
@@ -433,6 +419,28 @@ data() {
                     })
                 }
             })
+        }),
+        db.collection('delivery').onSnapshot((res) => {
+            const changes = res.docChanges()
+            changes.forEach((change) => {
+                if(change.type === 'added') {
+                    this.deliveryItems.push({
+                        ...change.doc.data(),
+                        id: change.doc.id
+                    })
+                } else if(change.type === 'removed') {
+                    this.deliveryItems = this.deliveryItems.filter((item) => {
+                        return item.id != change.doc.id
+                    })
+                } else if(change.type === 'modified') {
+                    this.deliveryItems = this.deliveryItems.filter((item) => {
+                        return item.id != change.doc.id
+                    }) 
+                    this.deliveryItems.push({
+                        ...change.doc.data()
+                    })
+                }
+            })
         })
     }
 }
@@ -447,5 +455,8 @@ data() {
     }
     .form-switch {
         padding-left: 8rem;
+    }
+    .delivered {
+        border-left: #3cd1c2;
     }
 </style>

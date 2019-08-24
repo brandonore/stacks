@@ -62,15 +62,15 @@ data() {
 },
 methods: {
     createEvent() {
-    this.events.push({
-        start: '2018-11-21 14:00',
-        end: '2018-11-21 18:00',
-        title: 'Pick up supplies',
-        class: 'c_green'
-    })
+        this.events.push({
+            start: '2018-11-21 14:00',
+            end: '2018-11-21 18:00',
+            title: 'Pick up supplies',
+            class: 'c_green'
+        })
     },
     removeEvent(event) {
-    this.events.pop(event)
+        this.events.pop(event)
     }
 }
 }

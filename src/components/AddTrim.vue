@@ -1,7 +1,7 @@
 <template>    
     <v-dialog max-width="650" v-model="dialog">
         <template v-slot:activator="{ on }">
-            <v-btn v-on="on" width="225" text class="white--text pa-3 success" depressed>Trim <v-icon right>fal fa-plus</v-icon></v-btn>
+            <v-btn v-on="on" text class="white--text text-capitalize comp-btn">Add Trim</v-btn>
         </template>
         <v-card class="pa-5">
             <v-card-title class="mb-5">
@@ -203,3 +203,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .comp-btn {
+        letter-spacing: normal !important;
+    }
+    .comp-btn.v-btn:not(.v-btn--round).v-size--default {
+        padding: 0 65% 0 0;
+    }
+</style>
