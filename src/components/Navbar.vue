@@ -72,6 +72,14 @@
                                 <v-list-item-title><AddExtract /></v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
+                        <v-list-item class="sign-out-link comp-link">
+                            <v-list-item-action>
+                                <v-icon small color="error">fas fa-sign-out-alt</v-icon>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title><v-btn @click="signOut" text class="error--text text-capitalize comp-btn">Sign Out</v-btn></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
                 </v-container>
             </v-list>
         </v-navigation-drawer>
@@ -168,11 +176,6 @@ export default {
             { icon: 'fas fa-calendar-day', text: 'Calendar', route: '/calendar' },
             { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'}
         ],
-        componentLinks: [
-            { icon: 'fas fa-plus', text: 'Add Shop', component: AddShopData },
-            { icon: 'fas fa-plus', text: 'Add Trim', component: AddTrim },
-            { icon: 'fas fa-plus', text: 'Add Extract', component: AddExtract }
-        ],
         user: null,
         drawer: null,
         snackbar: false,
@@ -231,7 +234,17 @@ export default {
     .side-link:hover {
         background: #3cd1c2;
     }
+    .sign-out-link:hover {
+        background: rgba(248, 62, 112, 0.2);
+    }
     .comp-link {
         max-height: 40px;
+    }
+    .comp-btn {
+        letter-spacing: normal !important;
+        font-size: 0.8125rem
+    }
+    .comp-btn.v-btn:not(.v-btn--round).v-size--default {
+        padding: 0 65% 0 0;
     }
 </style>

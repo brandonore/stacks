@@ -277,6 +277,7 @@ export default {
 <style scoped>
     .comp-btn {
         letter-spacing: normal !important;
+        font-size: 0.8125rem
     }
     .comp-btn.v-btn:not(.v-btn--round).v-size--default {
         padding: 0 65% 0 0;

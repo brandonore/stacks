@@ -3,6 +3,7 @@
         <v-layout row justify-center>
             <v-card class="pa-5" flat width="650">
                 <h3 class="mb-4 secondary--text text-center">Login</h3>
+                <v-flex class="text-center">Demo account<br>email: test@gmail.com pass: password</v-flex>
                 <v-form
                     ref="form"
                     v-model="valid"
