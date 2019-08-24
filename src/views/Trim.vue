@@ -220,7 +220,9 @@ methods: {
         db.collection('trim').doc(this.editTrim.id).update(this.editTrim)
         .then(() => {
             this.edit_dialog = false
-        })
+        }).catch((err) => {
+                console.log(err)
+            })
         this.$root.$emit('set-snackbar', 'editItem')
     },
     confirmModal(id) {

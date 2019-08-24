@@ -115,6 +115,19 @@
                                 :search="deliverySearch"
                                 class="mt-5 delivery-table"
                             >
+                            <template v-slot:item="{ item }">
+                                <tr :style="[item.readyToDeliver ? {'textDecoration': 'line-through', 'color': '#3cd1c2', 'backgroundColor': 'rgba(60,209,194, 0.2)', 'font-weight': 'bold' } : '']">
+                                    <td>{{ item.shop }}</td>
+                                    <td>{{ item.strain }}</td>
+                                    <td>{{ item.productType }}</td>
+                                    <td>{{ item.totalGrams }}</td>
+                                    <td>{{ item.readyToDeliver }}</td>
+                                    <td>
+                                        <v-icon small class="mr-2" @click="markDelivered(item)">fas fa-check-circle</v-icon>
+                                        <v-icon small class="mr-2" @click="confirmDeliveryModal(item.id)">fas fa-times</v-icon>
+                                    </td>
+                                </tr>
+                            </template>
                             <template v-slot:item.action="{ item }">
                             <v-tooltip left>
                                 <template v-slot:activator="{ on }">
@@ -343,6 +356,7 @@ data() {
     methods: {
         labelModal(item) {
             this.deliveryItem = Object.assign({}, item)
+            this.deliveryItem['readyToDeliver'] = false
             this.label_dialog = true
         },
         moveToDelivery() {
@@ -351,8 +365,13 @@ data() {
             })
         },
         markDelivered(item) {
-            let tr = document.querySelector('.delivery-table').rows
-            console.log(tr)
+            !item.readyToDeliver ? item.readyToDeliver = true : item.readyToDeliver = false
+            db.collection('delivery').doc(item.id).update({'readyToDeliver': item.readyToDeliver})
+                .then(() => {
+                    console.log('Item marked as delivered')
+                }).catch((err) => {
+                    console.log(err)
+                })
         },
         calcYield(grams, weight) {
             return grams / weight
@@ -386,6 +405,8 @@ data() {
             db.collection('packaging').doc(this.editPackage.id).update(this.editPackage)
             .then(() => {
                 this.edit_dialog = false
+            }).catch((err) => {
+                console.log(err)
             })
             this.$root.$emit('set-snackbar', 'editItem')
         },
@@ -396,6 +417,9 @@ data() {
         reset () {
             this.$refs.form.reset()
         }
+    },
+    computed: {
+
     },
     created() {
         db.collection('packaging').onSnapshot((res) => {
@@ -457,6 +481,11 @@ data() {
         padding-left: 8rem;
     }
     .delivered {
-        border-left: #3cd1c2;
+        border-left: 5px solid #3cd1c2 !important;
+        color: white;
+    }
+    .not-delivered {
+        border: none;
+        color: rgba(0, 0, 0, 0.87)
     }
 </style>

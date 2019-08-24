@@ -307,6 +307,8 @@ export default {
             db.collection('extract').doc(this.editExtract.id).update(this.editExtract)
             .then(() => {
                 this.edit_dialog = false
+            }).catch((err) => {
+                console.log(err)
             })
             this.$root.$emit('set-snackbar', 'editItem')
         },
