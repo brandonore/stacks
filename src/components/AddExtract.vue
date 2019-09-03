@@ -108,7 +108,6 @@
 
 <script>
 import format from 'date-fns/format'
-import db from '@/firebase'
 import { required, numeric, minLength } from 'vuelidate/lib/validators'
 
 export default {
@@ -221,7 +220,7 @@ export default {
                     rerun: this.extract.rerun,
                     notes: this.extract.notes
                 }
-                db.collection('extract').add(extract).then(() => {
+                this.$db.collection('extract').add(extract).then(() => {
                     this.loading = false
                     this.dialog = false
                     this.extract = {
@@ -259,13 +258,24 @@ export default {
         }
     },
     created() {
-        db.collection('shopdata').onSnapshot((res) => {
+        this.$db.collection('shopdata').onSnapshot((res) => {
             const changes = res.docChanges()
             changes.forEach((change) => {
                 if(change.type === 'added') {
                     this.shopdata.push({
                         ...change.doc.data(),
                         id: change.doc.id
+                    })
+                } else if(change.type === 'removed') {
+                    this.shopdata = this.shopdata.filter((item) => {
+                        return item.id != change.doc.id
+                    })
+                } else if(change.type === 'modified') {
+                    this.shopdata = this.shopdata.filter((item) => {
+                        return item.id != change.doc.id
+                    }) 
+                    this.shopdata.push({
+                        ...change.doc.data()
                     })
                 }
             })

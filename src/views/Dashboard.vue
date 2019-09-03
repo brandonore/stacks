@@ -115,174 +115,170 @@
     </div>
     </template>
 
-    <script>
-    import db from "../firebase";
-    import LineChart from "@/components/LineChart";
-    import BarChart from "@/components/BarChart";
-    import DoughnutChart from "@/components/DoughnutChart";
-    import lineChartData from "@/lineChartData";
-    import barChartData from "@/chart2";
-    import doughnutChartData from "@/doughnut-chart";
+<script>
+import LineChart from "@/components/LineChart";
+import BarChart from "@/components/BarChart";
+import DoughnutChart from "@/components/DoughnutChart";
+import lineChartData from "@/lineChartData";
+import barChartData from "@/chart2";
+import doughnutChartData from "@/doughnut-chart";
 
-    const numeral = require("numeral");
+const numeral = require("numeral");
 
-    export default {
-    name: "dashboard",
-    components: {
-        LineChart,
-        BarChart,
-        DoughnutChart
-    },
-    data() {
-        return {
-        trim: [],
-        extract: [],
-        packaging: [],
-        lineChartData,
-        barChartData,
-        doughnutChartData,
-        height: 400,
-        loaded: false
-        };
-    },
-    methods: {
-        formatWeight(weight) {
-        let val = numeral(weight).format("0,0");
-        return val;
+export default {
+name: "dashboard",
+components: {
+    LineChart,
+    BarChart,
+    DoughnutChart
+},
+data() {
+    return {
+    trim: [],
+    extract: [],
+    packaging: [],
+    lineChartData,
+    barChartData,
+    doughnutChartData,
+    height: 400,
+    loaded: false
+    };
+},
+methods: {
+    formatWeight(weight) {
+    let val = numeral(weight).format("0,0");
+    return val;
+    }
+},
+created() {
+    this.$db.collection("trim").onSnapshot(res => {
+    const changes = res.docChanges();
+    changes.forEach(change => {
+        if (change.type === "added") {
+        this.trim.push({
+            ...change.doc.data(),
+            id: change.doc.id
+        });
         }
-    },
-    created() {
-        db.collection("trim").onSnapshot(res => {
+    });
+    }),
+    this.$db.collection("extract").onSnapshot(res => {
         const changes = res.docChanges();
         changes.forEach(change => {
-            if (change.type === "added") {
-            this.trim.push({
-                ...change.doc.data(),
-                id: change.doc.id
+        if (change.type === "added") {
+            this.extract.push({
+            ...change.doc.data(),
+            id: change.doc.id
             });
-            }
+        }
         });
-        }),
-        db.collection("extract").onSnapshot(res => {
-            const changes = res.docChanges();
-            changes.forEach(change => {
-            if (change.type === "added") {
-                this.extract.push({
-                ...change.doc.data(),
-                id: change.doc.id
-                });
-            }
+    }),
+    this.$db.collection("packaging").onSnapshot(res => {
+        const changes = res.docChanges();
+        changes.forEach(change => {
+        if (change.type === "added") {
+            this.packaging.push({
+            ...change.doc.data(),
+            id: change.doc.id
             });
-        }),
-        db.collection("packaging").onSnapshot(res => {
-            const changes = res.docChanges();
-            changes.forEach(change => {
-            if (change.type === "added") {
-                this.packaging.push({
-                ...change.doc.data(),
-                id: change.doc.id
-                });
-            }
-            });
+        }
+        });
 
-            this.$forceUpdate();
-        });
-    },
-    computed: {
-        computedChartData() {
-            let tempData = {
-                labels: [
-                "JAN",
-                "FEB",
-                "MAR",
-                "APR",
-                "MAY",
-                "JUN",
-                "JUL",
-                "AUG",
-                "SEP",
-                "OCT",
-                "NOV",
-                "DEC"
-                ],
-                datasets: [
-                {
-                    label: "Avg Yield % by Month",
-                    borderColor: "rgba(116, 235, 213, 1)",
-                    pointBorderColor: "rgba(116, 235, 213, 1)",
-                    pointBackgroundColor: "rgba(116, 235, 213, 1)",
-                    pointHoverBackgroundColor: "rgba(116, 235, 213, 1)",
-                    pointHoverBorderColor: "rgba(116, 235, 213, 1)",
-                    pointBorderWidth: 10,
-                    pointHoverRadius: 10,
-                    pointHoverBorderWidth: 1,
-                    pointRadius: 0.5,
-                    fill: true,
-                    backgroundColor: "rgba(116, 235, 213, 0.6)",
-                    borderWidth: 4,
-                    data: [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                    ]
-                }
+        this.$forceUpdate();
+    });
+},
+computed: {
+    computedChartData() {
+        let tempData = {
+            labels: [
+            "JAN",
+            "FEB",
+            "MAR",
+            "APR",
+            "MAY",
+            "JUN",
+            "JUL",
+            "AUG",
+            "SEP",
+            "OCT",
+            "NOV",
+            "DEC"
+            ],
+            datasets: [
+            {
+                label: "Avg Yield % by Month",
+                borderColor: "rgba(116, 235, 213, 1)",
+                pointBorderColor: "rgba(116, 235, 213, 1)",
+                pointBackgroundColor: "rgba(116, 235, 213, 1)",
+                pointHoverBackgroundColor: "rgba(116, 235, 213, 1)",
+                pointHoverBorderColor: "rgba(116, 235, 213, 1)",
+                pointBorderWidth: 10,
+                pointHoverRadius: 10,
+                pointHoverBorderWidth: 1,
+                pointRadius: 0.5,
+                fill: true,
+                backgroundColor: "rgba(116, 235, 213, 0.6)",
+                borderWidth: 4,
+                data: [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
                 ]
             }
-
-            this.packaging.forEach(item => {
-                let monthNumber = parseInt(item.packageDate.substring(0, 2)) - 1
-                let percentage = Number(item.yield.substr(0, item.yield.length - 1))
-
-                if (tempData.datasets[0].data[monthNumber] === null) {
-                tempData.datasets[0].data[monthNumber] = percentage
-                } else {
-                tempData.datasets[0].data[monthNumber] =
-                    (tempData.datasets[0].data[monthNumber] + percentage) / 2
-                }
-            });
-
-            return tempData;
-        },
-
-        packageCount() {
-            return this.trim.reduce((total, item) => {
-                return total + item.batch.split(",").length;
-            }, 0);
-        },
-        trimWeight() {
-            return this.trim.reduce((total, item) => {
-                return total + item.weight;
-            }, 0);
-        },
-        slabsOnRack() {
-            return this.packaging.length;
-        },
-        extractWaste() {
-            return this.extract.reduce((total, item) => {
-                return total + item.waste;
-            }, 0);
-        },
-        totalGrams() {
-            return this.packaging.reduce((total, item) => {
-                return total + item.totalGrams;
-            }, 0);
+            ]
         }
-    }
-    };
-    </script>
+        this.packaging.forEach(item => {
+            let monthNumber = parseInt(item.packageDate.substring(0, 2)) - 1
+            let percentage = Number(item.yield.substr(0, item.yield.length - 1))
 
-    <style>
+            if (tempData.datasets[0].data[monthNumber] === null) {
+            tempData.datasets[0].data[monthNumber] = percentage
+            } else {
+            tempData.datasets[0].data[monthNumber] =
+                (tempData.datasets[0].data[monthNumber] + percentage) / 2
+            }
+        });
+        return tempData;
+    },
+    packageCount() {
+        return this.trim.reduce((total, item) => {
+            return total + item.batch.split(",").length;
+        }, 0);
+    },
+    trimWeight() {
+        return this.trim.reduce((total, item) => {
+            return total + item.weight;
+        }, 0);
+    },
+    slabsOnRack() {
+        return this.packaging.length;
+    },
+    extractWaste() {
+        return this.extract.reduce((total, item) => {
+            return total + item.waste;
+        }, 0);
+    },
+    totalGrams() {
+        return this.packaging.reduce((total, item) => {
+            return total + item.totalGrams;
+        }, 0);
+    }
+}
+};
+</script>
+
+<style>
     .test-card {
     border-top: 3px solid #5969ff;
     border-radius: 6px;
     }
-    </style>
+</style>

@@ -101,7 +101,6 @@
 </template>
 
 <script>
-import db from '@/firebase'
 import { required } from 'vuelidate/lib/validators'
 import format from 'date-fns/format'
 
@@ -140,7 +139,7 @@ methods: {
         this.edit_dialog = true
     },
     updateItem() {
-        db.collection('shopdata').doc(this.editShop.id).update(this.editShop)
+        this.$db.collection('shopdata').doc(this.editShop.id).update(this.editShop)
         .then(() => {
             this.edit_dialog = false
         }).catch((err) => {
@@ -153,7 +152,7 @@ methods: {
         this.id = id
     },
     deleteItem() {
-        db.collection('shopdata').doc(this.id).delete()
+        this.$db.collection('shopdata').doc(this.id).delete()
         this.id = null
         this.delete_dialog = false
     },
@@ -164,7 +163,7 @@ methods: {
     },
 },
 created() {
-    db.collection('shopdata').onSnapshot((res) => {
+    this.$db.collection('shopdata').onSnapshot((res) => {
         const changes = res.docChanges()
         changes.forEach((change) => {
             if(change.type === 'added') {

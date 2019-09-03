@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import db from '@/firebase'
 import { required } from 'vuelidate/lib/validators'
 
 export default {
@@ -66,7 +65,7 @@ export default {
                     shopname: this.shopname,
                     license: this.license,
                 }
-                db.collection('shopdata').add(shop).then(() => {
+                this.$db.collection('shopdata').add(shop).then(() => {
                     this.loading = false
                     this.dialog = false
                     this.shopname = ''

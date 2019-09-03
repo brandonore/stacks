@@ -89,7 +89,7 @@
             flat
             class="app-bar"
         >
-            <v-app-bar-nav-icon color="grey" @click.stop="drawer = !drawer" v-if="user"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon color="grey" class="menu-btn" @click.stop="drawer = !drawer" v-if="user"></v-app-bar-nav-icon>
             <v-divider
                 class="mx-4"
                 vertical
@@ -148,6 +148,7 @@
 
 <script>
 import firebase from 'firebase'
+import { mapState } from 'vuex'
 import AddShopData from './AddShopData'
 import AddTrim from './AddTrim'
 import AddExtract from './AddExtract'
@@ -173,7 +174,7 @@ export default {
             { icon: 'fas fa-calendar-day', text: 'Calendar', route: '/calendar' },
             { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'}
         ],
-        user: null,
+        // user: null,
         drawer: null,
         snackbar: false,
         timeout: 4000,
@@ -199,7 +200,7 @@ export default {
             this.snackbarVal = ''
         },
         signOut() {
-            firebase.auth().signOut().then(() => {
+            this.$auth.logout().then(() => {
                 console.log('signed out successfully')
                 this.drawer = null
                 this.$router.replace('/login')
@@ -207,16 +208,19 @@ export default {
             
         }
     },
-    created() {
-        firebase.auth().onAuthStateChanged(user => {
-            if(user) {
-                this.user = user
-                console.log(user)
-            } else {
-                this.user = null
-            }
-        })
+    computed: {
+        ...mapState(['user'])
     },
+    // created() {
+    //     firebase.auth().onAuthStateChanged(user => {
+    //         if(user) {
+    //             this.user = user
+    //             console.log(user)
+    //         } else {
+    //             this.user = null
+    //         }
+    //     })
+    // },
     mounted() {
         this.$root.$on('set-snackbar', (val) => {
             this.snackbarVal = val
@@ -242,5 +246,8 @@ export default {
     }
     .comp-btn.v-btn:not(.v-btn--round).v-size--default {
         padding: 0 65% 0 0;
+    }
+    .v-btn::before {
+        background-color: transparent;
     }
 </style>

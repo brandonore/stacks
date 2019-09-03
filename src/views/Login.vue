@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import { mapGetters } from 'vuex';
 
 export default {
     data() {
@@ -58,11 +58,23 @@ export default {
             password: null
         }
     },
+    computed: {
+        ...mapGetters(['user']),
+        nextRoute() {
+            return this.$router.replace('/dashboard') || '/'
+        }
+    },
+    watch: {
+        user(auth) {
+            if(!!auth) {
+                this.$router.replace(this.nextRoute)
+            }
+        }
+    },
     methods: {
-        login() {
-            firebase.auth().signInWithEmailAndPassword(this.email, this.password).then((user) => {
+        async login() {
+            const auth = await this.$auth.login(this.email, this.password).then((user) => {
                 console.log('successfully signed in')
-                this.$router.replace('/dashboard')
             }, (err) => {
                 console.log(err)
             })

@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import db from '@/firebase'
+import firebaseAuthPlugin from '../plugins/firebaseAuthPlugin'
 import { required, numeric, minLength } from 'vuelidate/lib/validators'
 import format from 'date-fns/format'
 
@@ -218,7 +218,7 @@ methods: {
     },
     updateItem() {
         this.editTrim.weight = Number(this.editTrim.weight)
-        db.collection('trim').doc(this.editTrim.id).update(this.editTrim)
+        this.$db.collection('trim').doc(this.editTrim.id).update(this.editTrim)
         .then(() => {
             this.edit_dialog = false
         }).catch((err) => {
@@ -231,7 +231,7 @@ methods: {
         this.id = id
     },
     deleteItem() {
-        db.collection('trim').doc(this.id).delete()
+        this.$db.collection('trim').doc(this.id).delete()
         this.id = null
         this.delete_dialog = false
     },
@@ -244,7 +244,7 @@ methods: {
     }
 },
 created() {
-    db.collection('trim').onSnapshot((res) => {
+    this.$db.collection('trim').onSnapshot((res) => {
         const changes = res.docChanges()
         changes.forEach((change) => {
             if(change.type === 'added') {

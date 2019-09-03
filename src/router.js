@@ -100,11 +100,8 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-    // const currentUser = store.state.user
-    const currentUser = firebase.auth().currentUser
+    const currentUser = store.state.user
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-
-    // NProgress.start()
 
     if(requiresAuth && !currentUser) {
         next('login')
@@ -115,8 +112,22 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-// router.afterEach((to, from) => {
-//     NProgress.done()
+// router.beforeEach((to, from, next) => {
+//     if (to.matched.some(record => record.meta.authRequred)) {
+//         if (!store.state.user) {
+//             next({
+//             path: '/login',
+//             query: { redirect: to.fullPath }
+//             })
+//         } else {
+//             next({
+//                 path: '/dashboard',
+//                 query: { redirect: to.fullPath }
+//             })
+//         }
+//     } else {
+//         next()
+//     }
 // })
 
 export default router
