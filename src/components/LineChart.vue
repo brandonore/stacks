@@ -1,21 +1,27 @@
 <script>
-import { Line } from 'vue-chartjs'
+import { Line } from "vue-chartjs";
 
 export default {
-    name: 'linechat',
-    extends: Line,
-    props: {
-        chartdata: {
-        type: Object,
-        default: null
-        },
-        options: {
-        type: Object,
-        default: null
-        }
+  name: "linechat",
+  extends: Line,
+  props: {
+    chartdata: {
+      type: Object,
+      default: null
     },
-    mounted () {
-        this.renderChart(this.chartdata, this.options)
+    options: {
+      type: Object,
+      default: null
     }
-}
+  },
+  mounted() {
+    this.renderChart(this.chartdata, this.options);
+  },
+
+  watch: {
+    chartdata: function(newVal) {
+      this.renderChart(this.chartdata, this.options);
+    }
+  }
+};
 </script>

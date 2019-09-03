@@ -23,6 +23,7 @@
                             :headers="headers"
                             :items="trim"
                             :search="search"
+                            class="pa-5"
                         >
                             <template v-slot:item.failed="{ item }">
                                 <v-chip small :color="getColor(item.failed)" dark>{{ item.failed }}</v-chip>
@@ -109,8 +110,8 @@
                                 <v-switch label="Failed?" v-model="editTrim.failed" color="primary"></v-switch>
                             </v-flex>
                             <v-flex xs12 sm8 class="text-right">
-                                <v-btn class="mr-2 mt-3" outlined color="error" @click="reset">Clear</v-btn>
-                                <v-btn class="mr-2 mt-3" outlined color="success" @click="edit_dialog = false">Cancel</v-btn>
+                                <v-btn class="mr-2 mt-3" depressed color="error" @click="reset">Clear</v-btn>
+                                <v-btn class="mr-2 mt-3" outlined color="error" @click="edit_dialog = false">Cancel</v-btn>
                                 <v-btn text class="mr-2 mt-3 success" @click="updateItem" :loading="loading">Update</v-btn>
                             </v-flex>
                         </v-layout>

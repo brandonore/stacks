@@ -193,8 +193,8 @@
                         </v-layout>
                         <v-layout wrap>
                             <v-flex xs12 class="text-center">
-                                <v-btn class="mr-2 mt-3" outlined color="error" @click="reset">Clear</v-btn>
-                                <v-btn class="mr-2 mt-3" outlined color="success" @click="edit_dialog = false">Cancel</v-btn>
+                                <v-btn class="mr-2 mt-3" depressed color="error" @click="reset">Clear</v-btn>
+                                <v-btn class="mr-2 mt-3" outlined color="error" @click="edit_dialog = false">Cancel</v-btn>
                                 <v-btn text class="mr-2 mt-3 success" @click="updateItem" :loading="loading">Update</v-btn>
                             </v-flex>
                         </v-layout>

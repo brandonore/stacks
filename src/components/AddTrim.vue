@@ -1,7 +1,7 @@
 <template>    
     <v-dialog max-width="650" v-model="dialog">
         <template v-slot:activator="{ on }">
-            <v-btn v-on="on" text class="white--text text-capitalize comp-btn">Add Trim</v-btn>
+            <v-btn :ripple="false" v-on="on" text class="white--text text-capitalize comp-btn">Add Trim</v-btn>
         </template>
         <v-card class="pa-5">
             <v-card-title class="mb-5">

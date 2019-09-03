@@ -12,13 +12,12 @@
                     <v-layout column align-center>
                         <v-flex class="mt-5 text-center">
                             <v-avatar size="100">
-                                <img v-if="avatarURL" :src="avatarURL" alt="avatar" class="avatar-image">
-                                <span v-else class="white--text">No avatar</span>
+                                <img src="../../public/stacksnotext.png" alt="logo" class="avatar-image">
                             </v-avatar>
                             <div class="white--text my-0 mt-4 subtitle-1 font-weight-light">
                                 Logged in as:
                             </div>
-                            <div class="white--text font-weight-bold title">
+                            <div class="white--text font-weight-500 title">
                                 {{ user.email }}
                             </div>
                         </v-flex>
@@ -77,7 +76,7 @@
                                 <v-icon small color="error">fas fa-sign-out-alt</v-icon>
                             </v-list-item-action>
                             <v-list-item-content>
-                                <v-list-item-title><v-btn @click="signOut" text class="error--text text-capitalize comp-btn">Sign Out</v-btn></v-list-item-title>
+                                <v-list-item-title><v-btn :ripple="false" @click="signOut" text class="error--text text-capitalize comp-btn">Sign Out</v-btn></v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                 </v-container>
@@ -97,28 +96,25 @@
                 inset
                 v-if="user"
             ></v-divider>
-            <v-toolbar-title>
-                <span class="success--text">STACKS</span>
-                <!-- <span class="success--text">CKS</span> -->
-            </v-toolbar-title>
+            <router-link to="/"><img src="../../public/stackslogosmall.png" alt="logo" height="40" /></router-link>
             <v-spacer></v-spacer>
             <div class="text-center">
                 <v-menu transition="slide-x-transition" offset-y v-if="user">
                 <template v-slot:activator="{ on }">
                     <v-btn
-                    text
-                    color="primary"
-                    dark
-                    v-on="on"
+                        text
+                        color="primary"
+                        dark
+                        v-on="on"
                     >
-                    Menu
+                        Menu
                     </v-btn>
                 </template>
                 <v-list>
                     <v-list-item
-                    v-for="link in links"
-                    :key="link.text"
-                    :to="link.route"
+                        v-for="link in links"
+                        :key="link.text"
+                        :to="link.route"
                     >
                     <v-list-item-title>{{ link.text }}</v-list-item-title>
                     </v-list-item>
@@ -170,6 +166,7 @@ export default {
     data: () => ({
         links: [
             { icon: 'fas fa-home', text: 'Dashboard', route: '/' },
+            { icon: 'fas fa-store', text: 'Shops', route: '/shops' },
             { icon: 'fas fa-sack', text: 'Trim', route: '/trim' },
             { icon: 'fas fa-burn', text: 'Extraction', route: '/extract' },
             { icon: 'fas fa-box', text: 'Packaging', route: '/packaging' },
@@ -181,8 +178,7 @@ export default {
         snackbar: false,
         timeout: 4000,
         snackbarVal: '',
-        navBgColor: '#373B5FFF',
-        avatarURL: null
+        navBgColor: '#373B5FFF'
     }),
     methods: {
         resetNavDrawerColor(color) {
@@ -232,7 +228,7 @@ export default {
 
 <style scoped>
     .side-link:hover {
-        background: #3cd1c2;
+        background: rgba(60, 209, 194, 0.2);
     }
     .sign-out-link:hover {
         background: rgba(248, 62, 112, 0.2);

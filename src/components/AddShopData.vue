@@ -1,7 +1,7 @@
 <template>
     <v-dialog max-width="600px" v-model="dialog">
         <template v-slot:activator="{ on }">
-            <v-btn v-on="on" text class="white--text text-capitalize comp-btn">Add Shop</v-btn>
+            <v-btn :ripple="false" v-on="on" text class="white--text text-capitalize comp-btn">Add Shop</v-btn>
         </template>
         <v-card class="pa-5">
             <v-card-title class="mb-5">
@@ -19,6 +19,7 @@
                     </template>
                     <v-layout row wrap>
                         <v-flex xs12 class="text-center">
+                            <v-btn class="mr-2 mt-3" depressed color="error" @click="reset($v)">Clear</v-btn>
                             <v-btn class="mr-2 mt-3" outlined color="error" @click="dialog = false">Cancel</v-btn>
                             <v-btn text class="success mr-2 mt-3" @click="submit" :loading="loading">Add</v-btn>
                         </v-flex>
@@ -52,6 +53,11 @@ export default {
         }
     },
     methods: {
+        reset ($v) {
+            this.$refs.form.reset()
+            this.loading = false
+            $v.$reset()
+        },
         submit() {
             this.$v.$touch()
             if(!this.$v.$invalid) {
@@ -81,5 +87,8 @@ export default {
     }
     .comp-btn.v-btn:not(.v-btn--round).v-size--default {
         padding: 0 65% 0 0;
+    }
+    .v-btn::before {
+        background-color: none;
     }
 </style>

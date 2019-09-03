@@ -5,6 +5,7 @@ import store from './store/store'
 import NProgress from 'nprogress'
 
 import Dashboard from './views/Dashboard'
+import Shops from './views/Shops'
 import Trim from './views/Trim'
 import Extract from './views/Extract'
 import Packaging from './views/Packaging'
@@ -33,6 +34,14 @@ const router = new Router({
             path: "/dashboard",
             name: "dashboard",
             component: Dashboard,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: "/shops",
+            name: "shops",
+            component: Shops,
             meta: {
                 requiresAuth: true
             }
