@@ -116,6 +116,7 @@
     </template>
 
 <script>
+import { mapState } from 'vuex'
 import LineChart from "@/components/LineChart";
 import BarChart from "@/components/BarChart";
 import DoughnutChart from "@/components/DoughnutChart";
@@ -151,7 +152,7 @@ methods: {
     }
 },
 created() {
-    this.$db.collection("trim").onSnapshot(res => {
+    this.$db.collection('users').doc(this.user.uid).collection("trim").onSnapshot(res => {
     const changes = res.docChanges();
     changes.forEach(change => {
         if (change.type === "added") {
@@ -162,7 +163,7 @@ created() {
         }
     });
     }),
-    this.$db.collection("extract").onSnapshot(res => {
+    this.$db.collection('users').doc(this.user.uid).collection("extract").onSnapshot(res => {
         const changes = res.docChanges();
         changes.forEach(change => {
         if (change.type === "added") {
@@ -173,7 +174,7 @@ created() {
         }
         });
     }),
-    this.$db.collection("packaging").onSnapshot(res => {
+    this.$db.collection('users').doc(this.user.uid).collection("packaging").onSnapshot(res => {
         const changes = res.docChanges();
         changes.forEach(change => {
         if (change.type === "added") {
@@ -183,11 +184,11 @@ created() {
             });
         }
         });
-
         this.$forceUpdate();
     });
 },
 computed: {
+    ...mapState(['user']),
     computedChartData() {
         let tempData = {
             labels: [

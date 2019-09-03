@@ -107,6 +107,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import format from 'date-fns/format'
 import { required, numeric, minLength } from 'vuelidate/lib/validators'
 
@@ -220,7 +221,7 @@ export default {
                     rerun: this.extract.rerun,
                     notes: this.extract.notes
                 }
-                this.$db.collection('extract').add(extract).then(() => {
+                this.$db.collection('users').doc(this.user.uid).collection('extract').add(extract).then(() => {
                     this.loading = false
                     this.dialog = false
                     this.extract = {
@@ -255,10 +256,11 @@ export default {
         },
         formattedProcessDate() {
             return this.extract.processDate ? format(this.extract.processDate, 'MM/DD/YYYY') : ''
-        }
+        },
+        ...mapState(['user'])
     },
     created() {
-        this.$db.collection('shopdata').onSnapshot((res) => {
+        this.$db.collection('users').doc(this.user.uid).collection('shopdata').onSnapshot((res) => {
             const changes = res.docChanges()
             changes.forEach((change) => {
                 if(change.type === 'added') {

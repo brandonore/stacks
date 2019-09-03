@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import firebaseAuthPlugin from '../plugins/firebaseAuthPlugin'
+import { mapState } from 'vuex'
 import { required, numeric, minLength } from 'vuelidate/lib/validators'
 import format from 'date-fns/format'
 
@@ -218,7 +218,7 @@ methods: {
     },
     updateItem() {
         this.editTrim.weight = Number(this.editTrim.weight)
-        this.$db.collection('trim').doc(this.editTrim.id).update(this.editTrim)
+        this.$db.collection('users').doc(this.user.uid).collection('trim').doc(this.editTrim.id).update(this.editTrim)
         .then(() => {
             this.edit_dialog = false
         }).catch((err) => {
@@ -231,7 +231,7 @@ methods: {
         this.id = id
     },
     deleteItem() {
-        this.$db.collection('trim').doc(this.id).delete()
+        this.$db.collection('users').doc(this.user.uid).collection('trim').doc(this.id).delete()
         this.id = null
         this.delete_dialog = false
     },
@@ -243,8 +243,11 @@ methods: {
         this.$refs.form.reset()
     }
 },
+computed: {
+    ...mapState(['user'])
+},
 created() {
-    this.$db.collection('trim').onSnapshot((res) => {
+    this.$db.collection('users').doc(this.user.uid).collection('trim').onSnapshot((res) => {
         const changes = res.docChanges()
         changes.forEach((change) => {
             if(change.type === 'added') {

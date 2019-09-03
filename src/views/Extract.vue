@@ -203,7 +203,7 @@
 </template>
 
 <script>
-import firebaseAuthPlugin from '../plugins/firebaseAuthPlugin'
+import { mapState } from 'vuex'
 import { required, numeric, minLength } from 'vuelidate/lib/validators'
 import format from 'date-fns/format'
 
@@ -293,7 +293,7 @@ export default {
             this.packaging_dialog = true
         },
         confirmMove() {
-            this.$db.collection('packaging').add(this.packageItem).then(() => {
+            this.$db.collection('users').doc(this.user.uid).collection('packaging').add(this.packageItem).then(() => {
                 this.packaging_dialog = false
             })
         },
@@ -304,7 +304,7 @@ export default {
         updateItem() {
             this.editExtract.weight = Number(this.editExtract.weight)
             this.editExtract.waste = Number(this.editExtract.waste)
-            this.$db.collection('extract').doc(this.editExtract.id).update(this.editExtract)
+            this.$db.collection('users').doc(this.user.uid).collection('extract').doc(this.editExtract.id).update(this.editExtract)
             .then(() => {
                 this.edit_dialog = false
             }).catch((err) => {
@@ -317,7 +317,7 @@ export default {
             this.id = id
         },
         deleteItem() {
-            this.$db.collection('extract').doc(this.id).delete()
+            this.$db.collection('users').doc(this.user.uid).collection('extract').doc(this.id).delete()
             this.id = null
             this.delete_dialog = false
         },
@@ -340,8 +340,11 @@ export default {
             else return 'success'
         }
     },
+    computed: {
+        ...mapState(['user'])
+    },
     created() {
-        this.$db.collection('extract').onSnapshot((res) => {
+        this.$db.collection('users').doc(this.user.uid).collection('extract').onSnapshot((res) => {
             const changes = res.docChanges()
             changes.forEach((change) => {
                 if(change.type === 'added') {

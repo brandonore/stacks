@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import format from 'date-fns/format'
 import { required, numeric, minLength } from 'vuelidate/lib/validators'
 
@@ -160,7 +161,7 @@ export default {
                     type: this.trim.type,
                     date: format(this.trim.date, 'MM/DD/YYYY')
                 }
-                this.$db.collection('trim').add(trim).then(() => {
+                this.$db.collection('users').doc(this.user.uid).collection('trim').add(trim).then(() => {
                     this.loading = false
                     this.dialog = false
                     this.trim = {
@@ -185,10 +186,11 @@ export default {
     computed: {
         formattedDate() {
             return this.trim.date ? format(this.trim.date, 'MM/DD/YYYY') : ''
-        }
+        },
+        ...mapState(['user'])
     },
     created() {
-        this.$db.collection('shopdata').onSnapshot((res) => {
+        this.$db.collection('users').doc(this.user.uid).collection('shopdata').onSnapshot((res) => {
             const changes = res.docChanges()
             changes.forEach((change) => {
                 if(change.type === 'added') {

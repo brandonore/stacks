@@ -147,7 +147,6 @@
 </template>
 
 <script>
-import firebase from 'firebase'
 import { mapState } from 'vuex'
 import AddShopData from './AddShopData'
 import AddTrim from './AddTrim'
@@ -174,12 +173,11 @@ export default {
             { icon: 'fas fa-calendar-day', text: 'Calendar', route: '/calendar' },
             { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'}
         ],
-        // user: null,
         drawer: null,
         snackbar: false,
         timeout: 4000,
         snackbarVal: '',
-        navBgColor: '#373B5FFF'
+        navBgColor: '#373B5FFF',
     }),
     methods: {
         resetNavDrawerColor(color) {
@@ -211,16 +209,6 @@ export default {
     computed: {
         ...mapState(['user'])
     },
-    // created() {
-    //     firebase.auth().onAuthStateChanged(user => {
-    //         if(user) {
-    //             this.user = user
-    //             console.log(user)
-    //         } else {
-    //             this.user = null
-    //         }
-    //     })
-    // },
     mounted() {
         this.$root.$on('set-snackbar', (val) => {
             this.snackbarVal = val

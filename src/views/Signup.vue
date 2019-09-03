@@ -15,9 +15,14 @@
                     ></v-text-field>
                     <v-text-field
                         v-model="password"
-                        label="password"
+                        label="Password"
                         required
                         type="password"
+                    ></v-text-field>
+                    <v-text-field
+                        v-model="username"
+                        label="Username"
+                        required
                         @keydown.enter="signUp"
                     ></v-text-field>
                     <v-flex xs12 class="my-5">
@@ -45,21 +50,30 @@
 
 
 <script>
-import firebase from 'firebase'
+import { mapGetters } from 'vuex';
 
 export default {
     data() {
         return {
             valid: false,
             email: null,
+            username: null,
             password: null
         }
     },
+    computed: {
+        ...mapGetters(['user'])
+    },
     methods: {
-        signUp() {
-            firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then((user) => {
-                console.log('account has been created')
+        async signUp() {
+            const auth = await this.$auth.signup(this.email, this.password).then((user) => {
+                return this.$db.collection('users').doc(user.user.uid).set({
+                    username: this.username
+                })
+            }).then(() => {
+                console.log('account created successfully')
                 this.$router.replace('/dashboard')
+                // console.log(user.user.uid)
             }, (err) => {
                 console.log(err)
             })

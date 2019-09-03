@@ -23,6 +23,9 @@ export default {
         logout: async () => {
             await auth.signOut()
         },
+        signup: async (email, pass) => {
+            return await auth.createUserWithEmailAndPassword(email, pass)
+        }
     }
     Vue.prototype.$db = db
     auth.onAuthStateChanged(user => {

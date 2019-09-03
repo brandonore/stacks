@@ -31,7 +31,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
+import store from '../store/store'
 
 export default {
     name: 'addshopdata',
@@ -65,7 +67,7 @@ export default {
                     shopname: this.shopname,
                     license: this.license,
                 }
-                this.$db.collection('shopdata').add(shop).then(() => {
+                this.$db.collection('users').doc(this.user.uid).collection('shopdata').add(shop).then(() => {
                     this.loading = false
                     this.dialog = false
                     this.shopname = ''
@@ -75,7 +77,10 @@ export default {
                 return
             }
         }
-    }
+    },
+    computed: {
+        ...mapState(['user'])
+    },
 }
 </script>
 

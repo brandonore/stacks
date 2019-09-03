@@ -254,6 +254,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { required, numeric, minLength } from 'vuelidate/lib/validators'
 import format from 'date-fns/format'
 
@@ -359,13 +360,13 @@ data() {
             this.label_dialog = true
         },
         moveToDelivery() {
-            this.$db.collection('delivery').add(this.deliveryItem).then(() => {
+            this.$db.collection('users').doc(this.user.uid).collection('delivery').add(this.deliveryItem).then(() => {
                 this.label_dialog = false
             })
         },
         markDelivered(item) {
             !item.readyToDeliver ? item.readyToDeliver = true : item.readyToDeliver = false
-            this.$db.collection('delivery').doc(item.id).update({'readyToDeliver': item.readyToDeliver})
+            this.$db.collection('users').doc(this.user.uid).collection('delivery').doc(item.id).update({'readyToDeliver': item.readyToDeliver})
                 .then(() => {
                     console.log('Item marked as delivered')
                 }).catch((err) => {
@@ -384,12 +385,12 @@ data() {
             this.id = id
         },
         deleteItem() {
-            this.$db.collection('packaging').doc(this.id).delete()
+            this.$db.collection('users').doc(this.user.uid).collection('packaging').doc(this.id).delete()
             this.id = null
             this.delete_dialog = false
         },
         deleteDeliveryItem() {
-            this.$db.collection('delivery').doc(this.id).delete()
+            this.$db.collection('users').doc(this.user.uid).collection('delivery').doc(this.id).delete()
             this.id = null
             this.delete_delivery_dialog = false
         },
@@ -401,7 +402,7 @@ data() {
             this.editPackage.weight = Number(this.editPackage.weight)
             this.editPackage.totalGrams = Number(this.editPackage.totalGrams)
             this.editPackage.yield = numeral(this.editPackage.totalGrams / this.editPackage.weight).format('0.00%')
-            this.$db.collection('packaging').doc(this.editPackage.id).update(this.editPackage)
+            this.$db.collection('users').doc(this.user.uid).collection('packaging').doc(this.editPackage.id).update(this.editPackage)
             .then(() => {
                 this.edit_dialog = false
             }).catch((err) => {
@@ -418,10 +419,10 @@ data() {
         }
     },
     computed: {
-
+        ...mapState(['user'])
     },
     created() {
-        this.$db.collection('packaging').onSnapshot((res) => {
+        this.$db.collection('users').doc(this.user.uid).collection('packaging').onSnapshot((res) => {
             const changes = res.docChanges()
             changes.forEach((change) => {
                 if(change.type === 'added') {
@@ -443,7 +444,7 @@ data() {
                 }
             })
         }),
-        this.$db.collection('delivery').onSnapshot((res) => {
+        this.$db.collection('users').doc(this.user.uid).collection('delivery').onSnapshot((res) => {
             const changes = res.docChanges()
             changes.forEach((change) => {
                 if(change.type === 'added') {
