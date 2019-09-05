@@ -283,6 +283,7 @@ export default {
             this.packageItem = Object.assign({}, item)
             let date = new Date()
             this.packageItem['rackDate'] = format(date, 'MM/DD/YYYY')
+            this.packageItem['packageDate'] = ''
             this.packageItem['totalGrams'] = 0
             this.packageItem['sample'] = '2'
             this.packageItem['testType'] = 'P'

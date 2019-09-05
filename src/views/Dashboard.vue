@@ -177,15 +177,26 @@ created() {
     this.$db.collection('users').doc(this.user.uid).collection("packaging").onSnapshot(res => {
         const changes = res.docChanges();
         changes.forEach(change => {
-        if (change.type === "added") {
-            this.packaging.push({
-            ...change.doc.data(),
-            id: change.doc.id
-            });
-        }
-        });
+            if (change.type === "added") {
+                this.packaging.push({
+                    ...change.doc.data(),
+                    id: change.doc.id
+                })
+            } else if(change.type === 'removed') {
+                this.packaging = this.packaging.filter((item) => {
+                    return item.id != change.doc.id
+                })
+            } else if(change.type === 'modified') {
+                this.packaging = this.packaging.filter((item) => {
+                    return item.id != change.doc.id
+                }) 
+                this.packaging.push({
+                    ...change.doc.data()
+                })
+            }
+        }) 
         this.$forceUpdate();
-    });
+    })
 },
 computed: {
     ...mapState(['user']),
