@@ -68,7 +68,7 @@
                                 <v-icon small color="white">fas fa-circle-notch</v-icon>
                             </v-list-item-action>
                             <v-list-item-content>
-                                <v-list-item-title><AddExtract /></v-list-item-title>
+                                <v-list-item-title><AddPackaging /></v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                         <v-list-item class="sign-out-link comp-link">
@@ -151,6 +151,7 @@ import { mapState } from 'vuex'
 import AddShopData from './AddShopData'
 import AddTrim from './AddTrim'
 import AddExtract from './AddExtract'
+import AddPackaging from './AddPackaging'
 
 
 export default {
@@ -158,7 +159,8 @@ export default {
     components: { 
         AddShopData, 
         AddTrim,
-        AddExtract
+        AddExtract,
+        AddPackaging
     },
     props: {
         source: String,

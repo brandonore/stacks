@@ -239,7 +239,7 @@ computed: {
         }
         this.packaging.forEach(item => {
             let monthNumber = parseInt(item.packageDate.substring(0, 2)) - 1
-            let percentage = Number(item.yield.substr(0, item.yield.length - 1))
+            let percentage = (item.yield ? Number(item.yield.substr(0, item.yield.length - 1)) : 0)
 
             if (tempData.datasets[0].data[monthNumber] === null) {
             tempData.datasets[0].data[monthNumber] = percentage

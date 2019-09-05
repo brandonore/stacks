@@ -3,24 +3,32 @@
         <v-layout row justify-center>
             <v-card class="pa-5" flat width="650">
                 <h3 class="mb-4 secondary--text text-center">Login</h3>
-                <v-flex class="text-center">Demo account<br>email: admin@gmail.com pass: password</v-flex>
+                <v-flex class="text-center">Demo account<br>email: demo@demo.com pass: password</v-flex>
                 <v-form
                     ref="form"
                     v-model="valid"
                     class="text-center"
                 >
                     <v-text-field
-                        v-model="email"
+                        v-model="$v.email.$model"
                         label="Email"
                         required
                     ></v-text-field>
+                    <template v-if="$v.email.$error">
+                        <span class="error--text" v-if="!$v.email.required">Value required</span>
+                        <span class="error--text" v-if="!$v.email.email">Valid email required</span>
+                    </template>
                     <v-text-field
-                        v-model="password"
+                        v-model="$v.password.$model"
                         label="password"
                         required
                         type="password"
                         @keydown.enter="login"
                     ></v-text-field>
+                    <template v-if="$v.password.$error">
+                        <span class="error--text" v-if="!$v.password.required">Value required</span>
+                    </template>
+                    <v-flex v-if="firebaseError" class="ma-2 error--text">{{ firebaseError }}</v-flex>
                     <v-flex xs12 class="my-5">
                             <v-btn
                                 color="success white--text"
@@ -49,13 +57,24 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { required, email } from 'vuelidate/lib/validators'
 
 export default {
     data() {
         return {
             valid: false,
             email: null,
-            password: null
+            password: null,
+            firebaseError: null
+        }
+    },
+    validations: {
+        email: {
+            required,
+            email
+        },
+        password: {
+            required,
         }
     },
     computed: {
@@ -72,13 +91,17 @@ export default {
         }
     },
     methods: {
-        async login() {
-            const auth = await this.$auth.login(this.email, this.password).then((user) => {
-                console.log('successfully signed in')
-                console.log(user.user.uid)
-            }, (err) => {
-                console.log(err)
-            })
+        async login($v) {
+            this.$v.$touch()
+            if(!this.$v.$invalid) { 
+                const auth = await this.$auth.login(this.email, this.password).then((user) => {
+                    console.log('successfully signed in')
+                    console.log(user.user.uid)
+                }, (err) => {
+                    this.firebaseError = err.message
+                    console.log(err.message)
+                })
+            }
         }
     }
 }

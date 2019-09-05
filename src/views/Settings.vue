@@ -1,6 +1,9 @@
 <template>
     <div class="settings mx-3">
-        <h3 class="mb-5 mt-3 secondary--text">Settings</h3>
+        <h3 class="mb-5 mt-3 secondary--text">
+            Settings
+            <v-chip class="ma-2" color="pink" label text-color="white"><v-icon left>fas fa-exclamation-triangle</v-icon>Currently in Development</v-chip>
+        </h3>
         <v-divider class="mb-5"></v-divider>
         <!-- profile info -->
         <v-container fluid grid-list-xl>

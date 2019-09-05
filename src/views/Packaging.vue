@@ -7,7 +7,7 @@
                 <v-flex d-flex width="100%">
                     <v-card flat class="mx-auto" width="100%">
                         <v-toolbar color="pink" dark flat>
-                            <v-toolbar-title>Current Slabs</v-toolbar-title>
+                            <v-toolbar-title>Slabs on Rack</v-toolbar-title>
                             <v-spacer></v-spacer>
                             <v-btn icon>
                                 <v-icon>fal fa-times</v-icon>
@@ -170,19 +170,45 @@
                 </v-card-title>
                 <v-card-text>
                     <v-form class="px-3" ref="form">
-                        <v-text-field label="Shop" v-model="editPackage.shop" clearable></v-text-field>
-                        <!-- <template v-if="$v.editTrim.shop.$error">
-                            <span class="error--text" v-if="!$v.editTrim.shop.required">Value required</span>
-                        </template> -->
-                        <v-text-field label="Date Processed" v-model="editPackage.processDate" clearable></v-text-field>
-                        <v-text-field label="Strain" v-model="editPackage.strain" clearable></v-text-field>
-                        <v-text-field label="Shatter/Budder/Live/Sugar" v-model="editPackage.productType" clearable></v-text-field>
-                        <v-text-field label="Champagne" v-model="editPackage.champagne" clearable></v-text-field>
-                        <v-text-field label="Weight In" v-model="editPackage.weight" clearable></v-text-field>
-                        <v-text-field label="Processor Initials" v-model="editPackage.initials" clearable></v-text-field>
+                        <v-text-field label="Shop" v-model="$v.editPackage.shop.$model" clearable></v-text-field>
+                        <template v-if="$v.editPackage.shop.$error">
+                            <span class="error--text" v-if="!$v.editPackage.shop.required">Value required</span>
+                        </template>
+                        <v-text-field label="Date Processed" v-model="$v.editPackage.processDate.$model" clearable></v-text-field>
+                        <template v-if="$v.editPackage.processDate.$error">
+                            <span class="error--text" v-if="!$v.packaging.processDate.required">Value required</span>
+                        </template>
+                        <v-text-field label="Strain" v-model="$v.editPackage.strain.$model" clearable></v-text-field>
+                        <template v-if="$v.editPackage.strain.$error">
+                            <span class="error--text" v-if="!$v.packaging.strain.required">Value required</span>
+                        </template>
+                        <v-text-field label="Shatter/Budder/Live/Sugar" v-model="$v.editPackage.productType.$model" clearable></v-text-field>
+                        <template v-if="$v.editPackage.productType.$error">
+                            <span class="error--text" v-if="!$v.packaging.productType.required">Value required</span>
+                        </template>
+                        <v-text-field label="METRC Tags (Last 4) Comma seperated list for multiple values" v-model="$v.editPackage.batch.$model" clearable></v-text-field>
+                        <template v-if="$v.editPackage.batch.$error">
+                            <span class="error--text" v-if="!$v.editPackage.batch.required">Value required</span>
+                            <span class="error--text" v-if="!$v.editPackage.batch.minLength">4 digits required</span><br>
+                        </template>
+                        <v-text-field label="Weight In" v-model="$v.editPackage.weight.$model" clearable></v-text-field>
+                        <template v-if="$v.editPackage.weight.$error">
+                            <span class="error--text" v-if="!$v.editPackage.weight.required">Value required</span>
+                            <span class="error--text" v-if="!$v.editPackage.weight.numeric">Numbers only</span>
+                        </template>
+                        <v-text-field label="Processor Initials" v-model="$v.editPackage.initials.$model" clearable></v-text-field>
+                        <template v-if="$v.editPackage.initials.$error">
+                            <span class="error--text" v-if="!$v.packaging.initials.required">Value required</span>
+                        </template>
                         <v-text-field label="Total Grams" v-model="editPackage.totalGrams" clearable></v-text-field>
-                        <v-text-field label="Sample Size" v-model="editPackage.sample" clearable></v-text-field>
-                        <v-text-field label="Test Type" v-model="editPackage.testType" clearable></v-text-field>
+                        <v-text-field label="Sample Size" v-model="$v.editPackage.sample.$model" clearable></v-text-field>
+                        <template v-if="$v.editPackage.sample.$error">
+                            <span class="error--text" v-if="!$v.packaging.sample.required">Value required</span>
+                        </template>
+                        <v-text-field label="Test Type" v-model="$v.editPackage.testType.$model" clearable></v-text-field>
+                        <template v-if="$v.editPackage.testType.$error">
+                            <span class="error--text" v-if="!$v.packaging.testType.required">Value required</span>
+                        </template>
                         <v-layout>
                             <v-flex xs12 sm6>
                                 <v-text-field label="Date Packaged" class="mr-5" v-model="editPackage.packageDate" clearable></v-text-field>
@@ -192,7 +218,10 @@
                             </v-flex>
                         </v-layout>
                         <v-layout wrap>
-                            <v-flex xs12 class="text-center">
+                            <v-flex xs12 sm4>
+                                <v-switch label="Champagne?" v-model="editPackage.champagne" color="primary" inset></v-switch>
+                            </v-flex>
+                            <v-flex xs12 sm8 class="text-right">
                                 <v-btn class="mr-2 mt-3" depressed color="error" @click="reset">Clear</v-btn>
                                 <v-btn class="mr-2 mt-3" outlined color="error" @click="edit_dialog = false">Cancel</v-btn>
                                 <v-btn text class="mr-2 mt-3 success" @click="updateItem" :loading="loading">Update</v-btn>
@@ -239,7 +268,7 @@
             <v-layout justify-center>
             <v-dialog v-model="label_dialog" persistent max-width="350">
                 <v-card class="pa-2">
-                <v-card-title class="subtitle-1 font-weight-light">Are you sure you want to mark this as labeled?</v-card-title>
+                <v-card-title class="subtitle-1 font-weight-light">Are you sure you want to mark {{ deliveryItem.strain }} as labeled?</v-card-title>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="error" text @click="label_dialog = false">Cancel</v-btn>
@@ -249,7 +278,6 @@
             </v-dialog>
             </v-layout>
         </template>
-        <!-- {{ packageSlab }} -->
     </div>
 </template>
 
@@ -322,37 +350,45 @@ data() {
         ]
     }
 },
-// validations: {
-//         editTrim: {
-//             shop: {
-//                 required
-//             },
-//             license: {
-//                 required
-//             },
-//             manifest: {
-//                 required
-//             },
-//             strain: {
-//                 required
-//             },
-//             weight: {
-//                 required,
-//                 numeric
-//             },
-//             batch: {
-//                 required,
-//                 minLength: minLength(4),
-//                 numeric
-//             },
-//             type: {
-//                 required
-//             },
-//             date: {
-//                 required
-//             }
-//         }
-//     },
+validations: {
+        editPackage: {
+            shop: {
+                required
+            },
+            processDate: {
+                required
+            },
+            rackDate: {
+                required
+            },
+            strain: {
+                required
+            },
+            productType: {
+                required
+            },
+            batch: {
+                required,
+                minLength: minLength(4),
+            },
+            weight: {
+                required,
+                numeric
+            },
+            initials: {
+                required
+            },
+            totalGrams: {
+                numeric
+            },
+            sample: {
+                required
+            },
+            testType: {
+                required
+            }
+        }
+    },
     methods: {
         labelModal(item) {
             this.deliveryItem = Object.assign({}, item)

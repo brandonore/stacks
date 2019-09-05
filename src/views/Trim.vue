@@ -6,7 +6,7 @@
             <v-layout wrap>
                 <v-flex d-flex width="100%">
                     <v-card flat class="mx-auto" width="100%">
-                        <v-toolbar color="secondary lighten-1" dark flat>
+                        <v-toolbar color="blue-grey" dark flat>
                             <v-toolbar-title>Current Trim on Hand</v-toolbar-title>
                             <v-spacer></v-spacer>
                         </v-toolbar>
@@ -90,7 +90,6 @@
                         <template v-if="$v.editTrim.batch.$error">
                             <span class="error--text" v-if="!$v.editTrim.batch.required">Value required</span>
                             <span class="error--text" v-if="!$v.editTrim.batch.minLength">4 digits required</span><br>
-                            <span class="error--text" v-if="!$v.editTrim.batch.numeric">Numbers only</span>
                         </template>
                         <v-text-field label="Weight (g)" v-model="$v.editTrim.weight.$model" clearable></v-text-field>
                         <template v-if="$v.editTrim.weight.$error">
@@ -107,7 +106,7 @@
                         </template>
                         <v-layout row wrap>
                             <v-flex xs12 sm4>
-                                <v-switch label="Failed?" v-model="editTrim.failed" color="primary"></v-switch>
+                                <v-switch label="Failed?" v-model="editTrim.failed" color="primary" inset></v-switch>
                             </v-flex>
                             <v-flex xs12 sm8 class="text-right">
                                 <v-btn class="mr-2 mt-3" depressed color="error" @click="reset">Clear</v-btn>
@@ -201,7 +200,6 @@ validations: {
             batch: {
                 required,
                 minLength: minLength(4),
-                numeric
             },
             type: {
                 required

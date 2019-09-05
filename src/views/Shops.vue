@@ -6,7 +6,7 @@
             <v-layout wrap>
                 <v-flex d-flex width="100%">
                     <v-card flat class="mx-auto" width="100%">
-                        <v-toolbar color="deep-purple lighten-1" dark flat>
+                        <v-toolbar color="deep-purple darken-1" dark flat>
                             <v-toolbar-title>Shop Data</v-toolbar-title>
                             <v-spacer></v-spacer>
                         </v-toolbar>
@@ -51,7 +51,6 @@
                 </v-flex>
             </v-layout>
         </v-container>
-        {{ user.uid }}
         <!-- edit dialog -->
         <template>
             <v-layout justify-center>
@@ -193,3 +192,11 @@ created() {
 }
 }
 </script>
+
+<style>
+    .v-data-iterator > div {
+        text-align: center;
+        font-size: 14px;
+        color: rgba(0, 0, 0, .38);
+    }
+</style>

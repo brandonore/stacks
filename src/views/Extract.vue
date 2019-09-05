@@ -6,7 +6,7 @@
             <v-layout wrap>
                 <v-flex d-flex width="100%">
                     <v-card flat class="mx-auto" width="100%">
-                        <v-toolbar color="alternate" dark flat>
+                        <v-toolbar color="secondary lighten-1" dark flat>
                             <v-toolbar-title>Current Runs</v-toolbar-title>
                             <v-spacer></v-spacer>
                         </v-toolbar>
@@ -121,7 +121,6 @@
                         <template v-if="$v.editExtract.batch.$error">
                             <span class="error--text" v-if="!$v.editExtract.batch.required">Value required</span>
                             <span class="error--text" v-if="!$v.editExtract.batch.minLength">4 digits required</span><br>
-                            <span class="error--text" v-if="!$v.editExtract.batch.numeric">Numbers only</span>
                         </template>
                         <v-text-field label="Weight In (g)" v-model="$v.editExtract.weight.$model" clearable></v-text-field>
                         <template v-if="$v.editExtract.weight.$error">
@@ -188,8 +187,7 @@
             <v-layout justify-center>
             <v-dialog v-model="packaging_dialog" persistent max-width="350">
                 <v-card class="pa-2">
-                <v-card-title class="subtitle-1 font-weight-light">Are you sure you want to move this item?</v-card-title>
-                {{ packageItem }}
+                <v-card-title class="subtitle-1 font-weight-light">Are you sure you want to move {{ packageItem.strain }} to the rack?</v-card-title>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="error" text @click="packaging_dialog = false">Cancel</v-btn>

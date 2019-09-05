@@ -1,6 +1,9 @@
 <template>
     <div class="calendar mx-3">
-        <h3 class="mb-5 mt-3 secondary--text">Calendar</h3>
+        <h3 class="mb-5 mt-3 secondary--text">
+            Calendar 
+            <v-chip class="ma-2" color="pink" label text-color="white"><v-icon left>fas fa-exclamation-triangle</v-icon>Currently in Development</v-chip>
+        </h3>
         <v-divider class="mb-5"></v-divider>
             <v-layout>
             <v-flex>
@@ -25,8 +28,16 @@
             <v-flex xs12 class="text-center">
                 <v-btn outlined color="alternate" @click="createEvent">Add Event</v-btn>
             </v-flex>
-            {{ events }}
-            </v-layout>
+        </v-layout>
+        <v-card
+            class="mx-auto mt-4 px-3 pb-3"
+            color=""
+            max-width="100%"
+            outlined
+        >
+        <v-card-title>Debug info:</v-card-title>
+        <v-flex>{{ events }}</v-flex>
+        </v-card>
     </div>
 </template>
 
