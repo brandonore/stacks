@@ -13,6 +13,7 @@ import Settings from './views/Settings'
 import Calendar from './views/Calendar'
 import Login from './views/Login'
 import Signup from './views/Signup'
+import About from './views/About'
 
 import '../node_modules/nprogress/nprogress.css'
 
@@ -82,6 +83,14 @@ const router = new Router({
             path: "/settings",
             name: "settings",
             component: Settings,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: "/about",
+            name: "about",
+            component: About,
             meta: {
                 requiresAuth: true
             }

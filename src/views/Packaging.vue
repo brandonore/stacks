@@ -9,9 +9,6 @@
                         <v-toolbar color="pink" dark flat>
                             <v-toolbar-title>Slabs on Rack</v-toolbar-title>
                             <v-spacer></v-spacer>
-                            <v-btn icon>
-                                <v-icon>fal fa-times</v-icon>
-                            </v-btn>
                         </v-toolbar>
                         <v-card-title class="mb-5">
                             <v-text-field
@@ -96,9 +93,6 @@
                             <v-toolbar color="cyan darken-1" dark flat>
                                 <v-toolbar-title>Delivery Status</v-toolbar-title>
                                 <v-spacer></v-spacer>
-                                <v-btn icon>
-                                    <v-icon>fal fa-times</v-icon>
-                                </v-btn>
                             </v-toolbar>
                             <v-text-field
                                 v-model="deliverySearch"

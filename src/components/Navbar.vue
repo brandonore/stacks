@@ -173,7 +173,8 @@ export default {
             { icon: 'fas fa-burn', text: 'Extraction', route: '/extract' },
             { icon: 'fas fa-box', text: 'Packaging', route: '/packaging' },
             { icon: 'fas fa-calendar-day', text: 'Calendar', route: '/calendar' },
-            { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'}
+            { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'},
+            { icon: 'fas fa-info-circle', text: 'About', route: '/about' }
         ],
         drawer: null,
         snackbar: false,
