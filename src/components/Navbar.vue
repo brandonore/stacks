@@ -123,7 +123,7 @@
             </div>
         </v-app-bar>
         <v-content class="grey lighten-4">
-            <v-container fluid>
+            <v-container fluid fill-height class="main-container">
                 <router-view v-on:reset-color="resetNavDrawerColor($event)" v-on:custom-color="changeNavDrawerColor($event)"></router-view>
             </v-container>
         </v-content>
@@ -172,7 +172,7 @@ export default {
             { icon: 'fas fa-sack', text: 'Trim', route: '/trim' },
             { icon: 'fas fa-burn', text: 'Extraction', route: '/extract' },
             { icon: 'fas fa-box', text: 'Packaging', route: '/packaging' },
-            { icon: 'fas fa-calendar-day', text: 'Calendar', route: '/calendar' },
+            // { icon: 'fas fa-calendar-day', text: 'Calendar', route: '/calendar' },
             { icon: 'fas fa-sliders-h', text: 'Settings', route: '/settings'},
             { icon: 'fas fa-info-circle', text: 'About', route: '/about' }
         ],

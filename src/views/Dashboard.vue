@@ -1,11 +1,11 @@
-    <template>
+<template>
     <div class="dashboard mx-3">
         <h3 class="mb-5 mt-3 secondary--text">Dashboard</h3>
         <v-divider class="mb-5"></v-divider>
         <v-container fluid grid-list-xl>
         <!-- home row -->
         <v-layout wrap class="home-row">
-            <v-flex d-flex width="100%" xs12 sm6 md4>
+            <v-flex d-flex width="100%" xs12 sm5>
             <v-card flat class="pa-5" width="100%">
                 <h4 class="mb-3 grey--text font-weight-regular text-uppercase">Overview Breakdown</h4>
                 <v-divider class="mb-5"></v-divider>
@@ -13,7 +13,7 @@
                 <v-list-item>
                     <template>
                     <v-list-item-content>
-                        <v-list-item-title class="secondary--text">Batch count</v-list-item-title>
+                        <v-item-title class="secondary--text body-2">Batch count</v-item-title>
                     </v-list-item-content>
                     </template>
                     <v-spacer></v-spacer>
@@ -26,7 +26,7 @@
                 <v-list-item>
                     <template>
                     <v-list-item-content>
-                        <v-list-item-title class="secondary--text">Total trim weight</v-list-item-title>
+                        <v-list-item-title class="secondary--text body-2">Total trim weight</v-list-item-title>
                     </v-list-item-content>
                     </template>
                     <template>
@@ -40,7 +40,7 @@
                 <v-list-item>
                     <template>
                     <v-list-item-content>
-                        <v-list-item-title class="secondary--text">Slabs on rack</v-list-item-title>
+                        <v-list-item-title class="secondary--text body-2">Slabs on rack</v-list-item-title>
                     </v-list-item-content>
                     </template>
                     <template>
@@ -49,10 +49,10 @@
                     </v-list-item-content>
                     </template>
                 </v-list-item>
-                <v-list-item>
+                <!-- <v-list-item>
                     <template>
                     <v-list-item-content>
-                        <v-list-item-title class="secondary--text">Slabs ready for delivery</v-list-item-title>
+                        <v-list-item-title class="secondary--text body-2">Slabs ready for delivery</v-list-item-title>
                     </v-list-item-content>
                     </template>
                     <template>
@@ -60,11 +60,11 @@
                         <h3 class="grey--text text--darken-2 font-weight-regular">0</h3>
                     </v-list-item-content>
                     </template>
-                </v-list-item>
+                </v-list-item> -->
                 <v-list-item>
                     <template>
                     <v-list-item-content>
-                        <v-list-item-title class="secondary--text">Total grams packaged</v-list-item-title>
+                        <v-list-item-title class="secondary--text body-2">Total grams packaged</v-list-item-title>
                     </v-list-item-content>
                     </template>
                     <template>
@@ -76,7 +76,7 @@
                 <v-list-item>
                     <template>
                     <v-list-item-content>
-                        <v-list-item-title class="secondary--text">Total waste</v-list-item-title>
+                        <v-list-item-title class="secondary--text body-2">Total waste</v-list-item-title>
                     </v-list-item-content>
                     </template>
                     <template>
@@ -90,7 +90,7 @@
                 </template>
             </v-card>
             </v-flex>
-            <v-flex d-flex xs12 sm6 md8>
+            <v-flex d-flex xs12 sm7>
             <v-card flat class="pa-5" width="100%">
                 <v-card-text>
                 <LineChart :chartdata="computedChartData" :options="lineChartData.options" />
@@ -113,7 +113,7 @@
         </v-layout>-->
         </v-container>
     </div>
-    </template>
+</template>
 
 <script>
 import { mapState } from 'vuex'
@@ -289,8 +289,23 @@ computed: {
 </script>
 
 <style>
+    .dashboard,
+    .shops,
+    .trim,
+    .extract,
+    .package,
+    .calendar,
+    .settings,
+    .about,
+    .login {
+        height: 100%;
+        width: 100%;
+    }
     .test-card {
-    border-top: 3px solid #5969ff;
-    border-radius: 6px;
+        border-top: 3px solid #5969ff;
+        border-radius: 6px;
+    }
+    .outline {
+        border: 1px solid red;
     }
 </style>

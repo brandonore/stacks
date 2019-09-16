@@ -6,7 +6,7 @@
         </h3>
         <v-divider class="mb-5"></v-divider>
         <!-- profile info -->
-        <v-container fluid grid-list-xl>
+        <!-- <v-container fluid grid-list-xl>
             <v-layout wrap>
                 <v-flex d-flex width="100%" xs12 sm6 md3 class="text-center white pa-5">
                     <v-hover v-slot:default="{ hover }">
@@ -29,17 +29,14 @@
                         </v-avatar>
                     </v-hover>
                     <input v-show="false" ref="avatarUpload" @change="uploadFile" type="file" accept="image/*" >
-                    <!-- <v-flex d-flex class="text-center mt-5 ml-5">
-                        <v-btn small outlined color="error" @click="removeAvatar">Remove</v-btn>
-                    </v-flex> -->
                 </v-flex>
                 <v-flex xs12 sm6 md9 class="layout2 white pl-5">
                     <div class="text-left secondary--text text-uppercase pt-3 title">Profile Settings</div>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea minus nulla ab sint sunt necessitatibus enim, ipsa debitis placeat aspernatur!
                 </v-flex>
-            </v-layout>
+            </v-layout> -->
             <!-- other settings -->
-            <v-layout wrap class="mt-3">
+            <!-- <v-layout wrap class="mt-3">
                 <v-flex xs12 sm6>
                     <v-card flat class="mr-3">
                         <div class="text-center secondary--text text-uppercase pt-3 title">Side Menu Color</div>
@@ -67,7 +64,7 @@
                     </v-card>
                 </v-flex>
             </v-layout>
-        </v-container>
+        </v-container> -->
     </div>
 </template>
 

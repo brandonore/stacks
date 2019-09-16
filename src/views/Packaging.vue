@@ -61,7 +61,7 @@
                                         <v-icon
                                             v-on="on"
                                             small
-                                            class="mr-2"
+                                            class=""
                                             @click="labelModal(item)"
                                         >
                                             fas fa-tag
