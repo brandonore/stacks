@@ -18,12 +18,12 @@
                             <v-card-text>{{ item.date }}</v-card-text>
                             <v-divider></v-divider>
                             <v-card-text>{{ item.desc }}</v-card-text>
-                            <v-divider></v-divider>
-                            <v-chip v-if="item.new" class="mx-5 mt-5 px-5" small label color="success">New</v-chip>
+                            <v-divider class="mb-5"></v-divider>
+                            <v-chip v-if="item.new" class="mx-5 px-5" small label color="success">New</v-chip>
                             <v-card-text v-if="item.new" class="ml-1">{{ item.new }}</v-card-text>
                             <v-chip v-if="item.bugfix" class="mx-5 px-5" small label color="error">Bug Fix</v-chip>
                             <v-card-text v-if="item.bugfix" class="ml-1">{{ item.bugfix }}</v-card-text>
-                            <v-chip v-if="item.improved" class="mx-5 px-5 mt-5 white--text" small label color="alternate">Improved</v-chip>
+                            <v-chip v-if="item.improved" class="mx-5 px-5 white--text" small label color="alternate">Improved</v-chip>
                             <v-card-text v-if="item.improved" class="ml-1">{{ item.improved }}</v-card-text>
                         </v-flex>
                     </v-card>
@@ -54,6 +54,13 @@ data() {
                         - Removed calendar and delivery stat from dashboard.`, 
                 improved: '- CSS tweaks with padding and width' 
             },
+            { version: 'v1.0.3', date: 'Sept 16, 2019', 
+                desc: 'Major bug fix & improvement!', 
+                new: null, 
+                bugfix: `- Fixed yield % not calculating when adding a new slab 
+                        - Fixed typo causing packager initials to not save to the database`, 
+                improved: '- Set a default yield value (0.00%) to populate when transferring a run from extraction -> packaging'
+            }
         ]
     }
 },

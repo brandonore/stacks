@@ -205,6 +205,8 @@ import { mapState } from 'vuex'
 import { required, numeric, minLength } from 'vuelidate/lib/validators'
 import format from 'date-fns/format'
 
+const numeral = require('numeral')
+
 export default {
     name: 'extract',
     data() {
@@ -289,6 +291,7 @@ export default {
             this.packageItem['testType'] = 'P'
             this.packageItem['packInitials'] = ''
             this.packageItem['labeled'] = false
+            this.packageItem['yield'] = numeral(0).format('0.00%')
             this.packaging_dialog = true
         },
         confirmMove() {

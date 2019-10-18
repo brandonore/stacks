@@ -91,7 +91,7 @@
                     <template v-if="$v.packaging.testType.$error">
                         <span class="error--text" v-if="!$v.packaging.testType.required">Value required</span>
                     </template>
-                    <v-text-field label="Packager Initials" v-model="$v.packaging.packInitials" clearable></v-text-field>
+                    <v-text-field label="Packager Initials" v-model="packaging.packInitials" clearable></v-text-field>
                     <v-layout row wrap>
                         <v-flex xs12 sm4>
                                 <v-switch label="Champagne?" v-model="packaging.champagne" color="primary" inset></v-switch>
@@ -113,6 +113,8 @@ import { mapState } from 'vuex'
 import format from 'date-fns/format'
 import { required, numeric, minLength } from 'vuelidate/lib/validators'
 
+const numeral = require('numeral')
+
 export default {
     name: 'addpackaging',
     data() {
@@ -131,7 +133,8 @@ export default {
                 totalGrams: '',
                 sample: '',
                 testType: '',
-                packInitials: ''
+                packInitials: '',
+                yield: null
             },
             shopdata: [],
             loading: false,
@@ -215,7 +218,8 @@ export default {
                     totalGrams: Number(this.packaging.totalGrams),
                     sample: this.packaging.sample,
                     testType: this.packaging.testType,
-                    packInitials: this.packaging.packInitials
+                    packInitials: this.packaging.packInitials,
+                    yield: numeral(this.packaging.totalGrams / this.packaging.weight).format('0.00%')
                 }
                 this.$db.collection('users').doc(this.user.uid).collection('packaging').add(packaging).then(() => {
                     this.loading = false
@@ -234,7 +238,8 @@ export default {
                         totalGrams: '',
                         sample: '',
                         testType: '',
-                        packInitials: ''
+                        packInitials: '',
+                        yield: null
                     }
                 })
                 $v.$reset()
