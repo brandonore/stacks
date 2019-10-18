@@ -54,7 +54,7 @@ data() {
                         - Removed calendar and delivery stat from dashboard.`, 
                 improved: '- CSS tweaks with padding and width' 
             },
-            { version: 'v1.0.3', date: 'Sept 16, 2019', 
+            { version: 'v1.0.3', date: 'Oct 17, 2019', 
                 desc: 'Major bug fix & improvement!', 
                 new: null, 
                 bugfix: `- Fixed yield % not calculating when adding a new slab 
