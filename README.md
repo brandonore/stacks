@@ -1,4 +1,4 @@
-# marshmallow
+# Stacks
 
 ## Project setup
 ```
